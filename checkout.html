@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FoodHub - Checkout</title>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        color: #222;
+    }
+
+    nav {
+        background: #111;
+        color: white;
+        padding: 18px 7%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    nav h2 {
+        margin: 0;
+        color: #ff6b00;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        margin-left: 20px;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1100px;
+        margin: 30px auto;
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        gap: 25px;
+    }
+
+    .box {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    h1,
+    h2 {
+        margin-top: 0;
+    }
+
+    label {
+        display: block;
+        margin-top: 15px;
+        margin-bottom: 6px;
+        font-weight: bold;
+    }
+
+    input,
+    textarea,
+    select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 7px;
+        font-size: 15px;
+    }
+
+    textarea {
+        min-height: 90px;
+        resize: vertical;
+    }
+
+    .coupon-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .coupon-row input {
+        flex: 1;
+    }
+
+    button {
+        border: none;
+        border-radius: 7px;
+        padding: 12px 18px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .apply-btn {
+        background: #111;
+        color: white;
+    }
+
+    .place-btn {
+        width: 100%;
+        margin-top: 25px;
+        background: #ff6b00;
+        color: white;
+        font-size: 17px;
+        padding: 15px;
+    }
+
+    .remove-btn {
+        background: #dc3545;
+        color: white;
+        margin-top: 10px;
+    }
+
+    .coupon-message {
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+    .success {
+        color: green;
+    }
+
+    .error {
+        color: red;
+    }
+
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin: 12px 0;
+    }
+
+    .total {
+        border-top: 2px solid #ddd;
+        padding-top: 15px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .discount {
+        color: green;
+    }
+
+    .success-box {
+        text-align: center;
+    }
+
+    .success-box h1 {
+        color: green;
+    }
+
+    .whatsapp-btn {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 13px 20px;
+        background: #25D366;
+        color: white;
+        text-decoration: none;
+        border-radius: 7px;
+        font-weight: bold;
+    }
+
+    .empty {
+        color: #777;
+        text-align: center;
+        padding: 20px;
+    }
+
+    @media(max-width: 800px) {
+
+        .container {
+            grid-template-columns: 1fr;
+        }
+
+        nav {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        nav a {
+            margin-left: 10px;
+        }
+
+    }
+
+</style>
+```
+
+
+<style id="foodhub-cafe-theme">
+:root{--cafe-espresso:#3b2418;--cafe-coffee:#5a3825;--cafe-caramel:#b9783f;--cafe-gold:#d6a15d;--cafe-cream:#fff8ed;--cafe-beige:#f3e5d0;--cafe-latte:#ead4b7;--cafe-text:#2f211a;--cafe-white:#fffdf9;--cafe-shadow:0 8px 24px rgba(59,36,24,.12)}
+html,body{background:var(--cafe-cream)!important;color:var(--cafe-text)!important}
+body{font-family:Georgia,'Times New Roman',serif!important}
+header,.header,.navbar,nav,.nav,.topbar,.sidebar{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+header a,.header a,.navbar a,nav a,.nav a,.topbar a,.sidebar a{color:#fff8ed!important}
+h1,h2,h3,h4,h5,h6{color:var(--cafe-espresso)!important}
+button,.btn,.button,input[type=submit],input[type=button]{background:var(--cafe-coffee)!important;color:#fff8ed!important;border-color:var(--cafe-coffee)!important;border-radius:10px!important;box-shadow:0 3px 8px rgba(59,36,24,.16)!important}
+button:hover,.btn:hover,.button:hover,input[type=submit]:hover,input[type=button]:hover{background:var(--cafe-caramel)!important;border-color:var(--cafe-caramel)!important}
+a{color:var(--cafe-coffee)}
+a:hover{color:var(--cafe-caramel)}
+.card,.food-card,.menu-card,.product-card,.order-card,.stat-card,.box,.panel,.container-card,.admin-card,.reservation-card,.review-card,.table-card,.modal-content{background:var(--cafe-white)!important;border-color:var(--cafe-latte)!important;box-shadow:var(--cafe-shadow)!important;border-radius:14px!important}
+input,select,textarea{background:#fffdf9!important;color:var(--cafe-text)!important;border:1px solid #d8b994!important;border-radius:8px!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--cafe-caramel)!important;box-shadow:0 0 0 3px rgba(185,120,63,.15)!important}
+th{background:var(--cafe-coffee)!important;color:#fff8ed!important}
+tr:nth-child(even){background:#fbf1e2!important}
+.badge,.status,.tag,.category{background:var(--cafe-beige)!important;color:var(--cafe-espresso)!important}
+.logo,.brand{color:var(--cafe-gold)!important}
+footer{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+img{border-radius:10px}
+hr{border-color:var(--cafe-latte)!important}
+.cafe-theme-badge{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--cafe-beige);color:var(--cafe-espresso);font-size:13px;font-weight:700;letter-spacing:.4px}
+</style>
+</head>
+
+<body>
+
+<nav>
+
+```
+<h2>FoodHub</h2>
+
+<div>
+
+    <a href="index.html">Home</a>
+
+    <a href="menu.html">Menu</a>
+
+    <a href="cart.html">Cart</a>
+
+    <a href="orders.html">Orders</a>
+
+</div>
+```
+
+</nav>
+
+<div
+    class="container"
+    id="checkoutContainer"
+>
+
+```
+<div class="box">
+
+    <h1>
+        Checkout
+    </h1>
+
+    <label>
+        Customer Name
+    </label>
+
+    <input
+        type="text"
+        id="customerName"
+        placeholder="Enter your name"
+    >
+
+
+    <label>
+        Phone Number
+    </label>
+
+    <input
+        type="tel"
+        id="customerPhone"
+        placeholder="Enter phone number"
+    >
+
+
+    <label>
+        Order Type
+    </label>
+
+    <select id="orderType">
+
+        <option value="Delivery">
+            Delivery
+        </option>
+
+        <option value="Takeaway">
+            Takeaway
+        </option>
+
+    </select>
+
+
+    <label>
+        Delivery Address
+    </label>
+
+    <textarea
+        id="customerAddress"
+        placeholder="Enter delivery address"
+    ></textarea>
+
+
+    <h2 style="margin-top:30px;">
+        Coupon
+    </h2>
+
+    <div class="coupon-row">
+
+        <input
+            type="text"
+            id="couponCode"
+            placeholder="Enter coupon code"
+        >
+
+        <button
+            class="apply-btn"
+            onclick="applyCoupon()"
+        >
+            Apply
+        </button>
+
+    </div>
+
+    <div
+        id="couponMessage"
+        class="coupon-message"
+    ></div>
+
+    <button
+        id="removeCouponBtn"
+        class="remove-btn"
+        style="display:none;"
+        onclick="removeCoupon()"
+    >
+        Remove Coupon
+    </button>
+
+
+    <button
+        class="place-btn"
+        onclick="placeOrder()"
+    >
+        Place Order
+    </button>
+
+</div>
+
+
+<div class="box">
+
+    <h2>
+        Order Summary
+    </h2>
+
+    <div id="itemsContainer"></div>
+
+
+    <div class="summary-item">
+
+        <span>
+            Subtotal
+        </span>
+
+        <span id="subtotal">
+            ₹0.00
+        </span>
+
+    </div>
+
+
+    <div
+        class="summary-item discount"
+        id="discountRow"
+        style="display:none;"
+    >
+
+        <span>
+            Discount
+        </span>
+
+        <span id="discount">
+            -₹0.00
+        </span>
+
+    </div>
+
+
+    <div class="summary-item">
+
+        <span>
+            GST (5%)
+        </span>
+
+        <span id="gst">
+            ₹0.00
+        </span>
+
+    </div>
+
+
+    <div class="summary-item">
+
+        <span>
+            Delivery
+        </span>
+
+        <span id="delivery">
+            ₹0.00
+        </span>
+
+    </div>
+
+
+    <div class="summary-item total">
+
+        <span>
+            Total
+        </span>
+
+        <span id="total">
+            ₹0.00
+        </span>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<div
+    class="container"
+    id="successContainer"
+    style="display:none;"
+>
+
+```
+<div class="box success-box">
+
+    <h1>
+        Order Placed Successfully! 🎉
+    </h1>
+
+    <p id="successMessage"></p>
+
+    <a
+        id="whatsappLink"
+        class="whatsapp-btn"
+        target="_blank"
+        rel="noopener noreferrer"
+    >
+        💬 Continue to WhatsApp
+    </a>
+
+    <br>
+    <br>
+
+    <a href="orders.html">
+        View My Orders
+    </a>
+
+</div>
+```
+
+</div>
+
+<script>
+
+let cart = [];
+
+let foods = [];
+
+let appliedCoupon = null;
+
+let discountAmount = 0;
+
+
+const WHATSAPP_NUMBER =
+    "919063633222";
+
+
+/* ==========================================
+   CHECK LOGIN
+========================================== */
+
+const user =
+    JSON.parse(
+        localStorage.getItem("foodhubUser")
+    );
+
+
+if (!user) {
+
+    alert(
+        "Please login before checkout."
+    );
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* ==========================================
+   GET CART
+========================================== */
+
+const savedCart =
+    JSON.parse(
+        localStorage.getItem("foodhubCart")
+    ) || [];
+
+cart = savedCart;
+
+
+/* ==========================================
+   LOAD CHECKOUT
+========================================== */
+
+async function loadCheckout() {
+
+    try {
+
+        const response =
+            await fetch("/api/foods");
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to load foods"
+            );
+
+        }
+
+        foods =
+            await response.json();
+
+
+        /*
+           Load the logged-in name initially.
+           Customer can edit it.
+        */
+
+        document.getElementById(
+            "customerName"
+        ).value =
+            user.name || "";
+
+
+        renderItems();
+
+        calculateTotal();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Failed to load checkout."
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   RENDER ITEMS
+========================================== */
+
+function renderItems() {
+
+    const container =
+        document.getElementById(
+            "itemsContainer"
+        );
+
+    container.innerHTML = "";
+
+    if (cart.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty">
+                Your cart is empty.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    cart.forEach(item => {
+
+        const food =
+            foods.find(
+                f =>
+                    Number(f.id) ===
+                    Number(item.food_id)
+            );
+
+        if (!food) {
+            return;
+        }
+
+        const quantity =
+            Number(item.quantity);
+
+        const itemTotal =
+            Number(food.price) *
+            quantity;
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "summary-item";
+
+        div.innerHTML = `
+            <span>
+                ${food.name} × ${quantity}
+            </span>
+
+            <span>
+                ₹${itemTotal.toFixed(2)}
+            </span>
+        `;
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+/* ==========================================
+   GET SUBTOTAL
+========================================== */
+
+function getSubtotal() {
+
+    let subtotal = 0;
+
+    cart.forEach(item => {
+
+        const food =
+            foods.find(
+                f =>
+                    Number(f.id) ===
+                    Number(item.food_id)
+            );
+
+        if (!food) {
+            return;
+        }
+
+        subtotal +=
+            Number(food.price) *
+            Number(item.quantity);
+
+    });
+
+    return subtotal;
+
+}
+
+
+/* ==========================================
+   CALCULATE TOTAL
+========================================== */
+
+function calculateTotal() {
+
+    const subtotal =
+        getSubtotal();
+
+    const taxableAmount =
+        Math.max(
+            subtotal - discountAmount,
+            0
+        );
+
+    const gst =
+        taxableAmount * 0.05;
+
+    const orderType =
+        document.getElementById(
+            "orderType"
+        ).value;
+
+    let deliveryCharge = 0;
+
+
+    if (
+        orderType !== "Takeaway" &&
+        subtotal < 500
+    ) {
+
+        deliveryCharge = 40;
+
+    }
+
+
+    const total =
+        taxableAmount +
+        gst +
+        deliveryCharge;
+
+
+    document.getElementById(
+        "subtotal"
+    ).textContent =
+        "₹" +
+        subtotal.toFixed(2);
+
+
+    document.getElementById(
+        "gst"
+    ).textContent =
+        "₹" +
+        gst.toFixed(2);
+
+
+    document.getElementById(
+        "delivery"
+    ).textContent =
+        "₹" +
+        deliveryCharge.toFixed(2);
+
+
+    document.getElementById(
+        "total"
+    ).textContent =
+        "₹" +
+        total.toFixed(2);
+
+
+    if (discountAmount > 0) {
+
+        document.getElementById(
+            "discountRow"
+        ).style.display =
+            "flex";
+
+        document.getElementById(
+            "discount"
+        ).textContent =
+            "-₹" +
+            discountAmount.toFixed(2);
+
+    } else {
+
+        document.getElementById(
+            "discountRow"
+        ).style.display =
+            "none";
+
+    }
+
+}
+
+
+/* ==========================================
+   APPLY COUPON
+========================================== */
+
+async function applyCoupon() {
+
+    const code =
+        document.getElementById(
+            "couponCode"
+        ).value.trim();
+
+    const message =
+        document.getElementById(
+            "couponMessage"
+        );
+
+    if (!code) {
+
+        message.textContent =
+            "Enter a coupon code.";
+
+        message.className =
+            "coupon-message error";
+
+        return;
+
+    }
+
+
+    const subtotal =
+        getSubtotal();
+
+    if (subtotal <= 0) {
+
+        message.textContent =
+            "Your cart is empty.";
+
+        message.className =
+            "coupon-message error";
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/coupons/validate",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        code: code,
+                        subtotal: subtotal
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            message.textContent =
+                data.message ||
+                "Invalid coupon.";
+
+            message.className =
+                "coupon-message error";
+
+            return;
+
+        }
+
+
+        appliedCoupon =
+            data.coupon;
+
+        discountAmount =
+            Number(data.discount);
+
+
+        message.textContent =
+            `Coupon ${appliedCoupon.code} applied! You saved ₹${discountAmount.toFixed(2)}.`;
+
+        message.className =
+            "coupon-message success";
+
+
+        document.getElementById(
+            "removeCouponBtn"
+        ).style.display =
+            "block";
+
+
+        document.getElementById(
+            "couponCode"
+        ).disabled =
+            true;
+
+
+        calculateTotal();
+
+    } catch (error) {
+
+        console.error(error);
+
+        message.textContent =
+            "Unable to apply coupon.";
+
+        message.className =
+            "coupon-message error";
+
+    }
+
+}
+
+
+/* ==========================================
+   REMOVE COUPON
+========================================== */
+
+function removeCoupon() {
+
+    appliedCoupon = null;
+
+    discountAmount = 0;
+
+
+    document.getElementById(
+        "couponCode"
+    ).value = "";
+
+
+    document.getElementById(
+        "couponCode"
+    ).disabled =
+        false;
+
+
+    document.getElementById(
+        "removeCouponBtn"
+    ).style.display =
+        "none";
+
+
+    const message =
+        document.getElementById(
+            "couponMessage"
+        );
+
+    message.textContent = "";
+
+    message.className =
+        "coupon-message";
+
+
+    calculateTotal();
+
+}
+
+
+/* ==========================================
+   PLACE ORDER
+========================================== */
+
+async function placeOrder() {
+
+    if (!cart.length) {
+
+        alert(
+            "Your cart is empty."
+        );
+
+        return;
+
+    }
+
+
+    const customerName =
+        document.getElementById(
+            "customerName"
+        ).value.trim();
+
+
+    const customerPhone =
+        document.getElementById(
+            "customerPhone"
+        ).value.trim();
+
+
+    const customerAddress =
+        document.getElementById(
+            "customerAddress"
+        ).value.trim();
+
+
+    const orderType =
+        document.getElementById(
+            "orderType"
+        ).value;
+
+
+    /* ======================================
+       VALIDATION
+    ====================================== */
+
+    if (!customerName) {
+
+        alert(
+            "Please enter your name."
+        );
+
+        return;
+
+    }
+
+
+    if (!customerPhone) {
+
+        alert(
+            "Please enter your phone number."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        orderType === "Delivery" &&
+        !customerAddress
+    ) {
+
+        alert(
+            "Please enter your delivery address."
+        );
+
+        return;
+
+    }
+
+
+    /* ======================================
+       ORDER DATA
+    ====================================== */
+
+    const orderData = {
+
+        user_id:
+            Number(user.id),
+
+        customer_name:
+            customerName,
+
+        items:
+            cart.map(item => ({
+
+                food_id:
+                    Number(item.food_id),
+
+                quantity:
+                    Number(item.quantity)
+
+            })),
+
+        customer_phone:
+            customerPhone,
+
+        delivery_address:
+            customerAddress,
+
+        order_type:
+            orderType,
+
+        coupon_code:
+            appliedCoupon
+                ? appliedCoupon.code
+                : "",
+
+        discount:
+            discountAmount
+
+    };
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/orders",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(orderData)
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            alert(
+                data.message ||
+                "Failed to place order."
+            );
+
+            return;
+
+        }
+
+
+        /* ==================================
+           CREATE WHATSAPP MESSAGE
+        =================================== */
+
+        let message =
+`🍽️ *FoodHub Order*
+
+*Order ID:* #${data.orderId}
+*Customer:* ${customerName}
+*Phone:* ${customerPhone}
+*Order Type:* ${orderType}
+`;
+
+
+        /* ==================================
+           ADDRESS
+        =================================== */
+
+        if (
+            orderType === "Delivery"
+        ) {
+
+            message +=
+`*Address:* ${customerAddress}
+`;
+
+        }
+
+
+        /* ==================================
+           ITEMS
+        =================================== */
+
+        message +=
+`
+*Items:*
+`;
+
+
+        cart.forEach(item => {
+
+            const food =
+                foods.find(
+                    f =>
+                        Number(f.id) ===
+                        Number(item.food_id)
+                );
+
+
+            if (!food) {
+                return;
+            }
+
+
+            const itemTotal =
+                Number(food.price) *
+                Number(item.quantity);
+
+
+            message +=
+`• ${food.name} × ${item.quantity} = ₹${itemTotal.toFixed(2)}
+`;
+
+        });
+
+
+        /* ==================================
+           PRICE DETAILS
+        =================================== */
+
+        message +=
+`
+*Subtotal:* ₹${Number(
+            data.subtotal
+        ).toFixed(2)}
+`;
+
+
+        if (
+            Number(data.discount) > 0
+        ) {
+
+            message +=
+`*Coupon:* ${data.couponCode}
+`;
+
+            message +=
+`*Discount:* -₹${Number(
+                data.discount
+            ).toFixed(2)}
+`;
+
+        }
+
+
+        message +=
+`*GST:* ₹${Number(
+            data.gst
+        ).toFixed(2)}
+`;
+
+
+        message +=
+`*Delivery:* ₹${Number(
+            data.deliveryCharge
+        ).toFixed(2)}
+`;
+
+
+        message +=
+`*Total:* ₹${Number(
+            data.total
+        ).toFixed(2)}
+`;
+
+
+        message +=
+`*Payment:* WhatsApp
+`;
+
+
+        message +=
+`*Payment Status:* Pending
+`;
+
+
+        /* ==================================
+           ENCODE WHATSAPP
+        =================================== */
+
+        const whatsappUrl =
+            "https://wa.me/" +
+            WHATSAPP_NUMBER +
+            "?text=" +
+            encodeURIComponent(message);
+
+
+        /* ==================================
+           CLEAR CART
+        =================================== */
+
+        localStorage.removeItem(
+            "foodhubCart"
+        );
+
+
+        /* ==================================
+           HIDE CHECKOUT
+        =================================== */
+
+        document.getElementById(
+            "checkoutContainer"
+        ).style.display =
+            "none";
+
+
+        /* ==================================
+           SHOW SUCCESS
+        ================================== */
+
+        document.getElementById(
+            "successContainer"
+        ).style.display =
+            "grid";
+
+
+        document.getElementById(
+            "successMessage"
+        ).innerHTML = `
+
+            <strong>
+                Order #${data.orderId}
+            </strong>
+
+            has been placed successfully.
+
+            <br><br>
+
+            Customer:
+
+            <strong>
+                ${customerName}
+            </strong>
+
+            <br><br>
+
+            Total Amount:
+
+            <strong>
+                ₹${Number(
+                    data.total
+                ).toFixed(2)}
+            </strong>
+
+            <br><br>
+
+            Payment Status:
+
+            <strong>
+                Pending
+            </strong>
+
+        `;
+
+
+        document.getElementById(
+            "whatsappLink"
+        ).href =
+            whatsappUrl;
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Server error. Please try again."
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   ORDER TYPE CHANGE
+========================================== */
+
+document.getElementById(
+    "orderType"
+).addEventListener(
+    "change",
+    calculateTotal
+);
+
+
+/* ==========================================
+   START
+========================================== */
+
+loadCheckout();
+
+</script>
+
+</body>
+
+</html>

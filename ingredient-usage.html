@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>FoodHub - Ingredient Usage</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f6fa;
+    color: #222;
+}
+
+.navbar {
+    background: #111827;
+    color: white;
+    padding: 18px 30px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    flex-wrap: wrap;
+}
+
+.navbar h2 {
+    margin: 0;
+    color: #ff7a00;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin-left: 18px;
+}
+
+.navbar a:hover {
+    color: #ff7a00;
+}
+
+.container {
+    width: 92%;
+    max-width: 1200px;
+    margin: 30px auto;
+}
+
+h1 {
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,0.08);
+}
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(220px, 1fr));
+
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+select,
+input {
+    width: 100%;
+    padding: 12px;
+
+    border: 1px solid #ccc;
+    border-radius: 7px;
+
+    font-size: 15px;
+    background: white;
+}
+
+button {
+    border: none;
+    border-radius: 7px;
+
+    padding: 12px 20px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.add-btn {
+    background: #ff7a00;
+    color: white;
+    margin-top: 20px;
+}
+
+.add-btn:hover {
+    background: #e66d00;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+th {
+    background: #111827;
+    color: white;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: white;
+    padding: 8px 14px;
+}
+
+.empty {
+    text-align: center;
+    padding: 30px;
+    color: #777;
+}
+
+.status {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 7px;
+    display: none;
+}
+
+.success {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+@media(max-width:700px) {
+
+    .navbar {
+        gap: 15px;
+    }
+
+    .navbar a {
+        margin-left: 5px;
+    }
+
+}
+
+</style>
+
+
+<style id="foodhub-cafe-theme">
+:root{--cafe-espresso:#3b2418;--cafe-coffee:#5a3825;--cafe-caramel:#b9783f;--cafe-gold:#d6a15d;--cafe-cream:#fff8ed;--cafe-beige:#f3e5d0;--cafe-latte:#ead4b7;--cafe-text:#2f211a;--cafe-white:#fffdf9;--cafe-shadow:0 8px 24px rgba(59,36,24,.12)}
+html,body{background:var(--cafe-cream)!important;color:var(--cafe-text)!important}
+body{font-family:Georgia,'Times New Roman',serif!important}
+header,.header,.navbar,nav,.nav,.topbar,.sidebar{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+header a,.header a,.navbar a,nav a,.nav a,.topbar a,.sidebar a{color:#fff8ed!important}
+h1,h2,h3,h4,h5,h6{color:var(--cafe-espresso)!important}
+button,.btn,.button,input[type=submit],input[type=button]{background:var(--cafe-coffee)!important;color:#fff8ed!important;border-color:var(--cafe-coffee)!important;border-radius:10px!important;box-shadow:0 3px 8px rgba(59,36,24,.16)!important}
+button:hover,.btn:hover,.button:hover,input[type=submit]:hover,input[type=button]:hover{background:var(--cafe-caramel)!important;border-color:var(--cafe-caramel)!important}
+a{color:var(--cafe-coffee)}
+a:hover{color:var(--cafe-caramel)}
+.card,.food-card,.menu-card,.product-card,.order-card,.stat-card,.box,.panel,.container-card,.admin-card,.reservation-card,.review-card,.table-card,.modal-content{background:var(--cafe-white)!important;border-color:var(--cafe-latte)!important;box-shadow:var(--cafe-shadow)!important;border-radius:14px!important}
+input,select,textarea{background:#fffdf9!important;color:var(--cafe-text)!important;border:1px solid #d8b994!important;border-radius:8px!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--cafe-caramel)!important;box-shadow:0 0 0 3px rgba(185,120,63,.15)!important}
+th{background:var(--cafe-coffee)!important;color:#fff8ed!important}
+tr:nth-child(even){background:#fbf1e2!important}
+.badge,.status,.tag,.category{background:var(--cafe-beige)!important;color:var(--cafe-espresso)!important}
+.logo,.brand{color:var(--cafe-gold)!important}
+footer{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+img{border-radius:10px}
+hr{border-color:var(--cafe-latte)!important}
+.cafe-theme-badge{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--cafe-beige);color:var(--cafe-espresso);font-size:13px;font-weight:700;letter-spacing:.4px}
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+NAVBAR
+===================================================== -->
+
+<div class="navbar">
+
+    <h2>FoodHub Admin</h2>
+
+    <div>
+
+        <a href="admin-dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="admin-foods.html">
+            Foods
+        </a>
+
+        <a href="admin-orders.html">
+            Orders
+        </a>
+
+        <a href="admin-reservations.html">
+            Reservations
+        </a>
+
+        <a href="admin-inventory.html">
+            Inventory
+        </a>
+
+        <a href="ingredient-usage.html">
+            Ingredient Usage
+        </a>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+MAIN
+===================================================== -->
+
+<div class="container">
+
+    <h1>Ingredient Usage</h1>
+
+    <p class="subtitle">
+        Connect restaurant foods with their required ingredients.
+    </p>
+
+
+    <!-- =================================================
+    ASSIGN INGREDIENT
+    ================================================= -->
+
+    <div class="card">
+
+        <h2>Assign Ingredient to Food</h2>
+
+        <div class="form-grid">
+
+
+            <!-- FOOD -->
+
+            <div class="form-group">
+
+                <label>
+                    Food
+                </label>
+
+                <select id="foodSelect">
+
+                    <option value="">
+                        Loading foods...
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- INGREDIENT -->
+
+            <div class="form-group">
+
+                <label>
+                    Ingredient
+                </label>
+
+                <select id="ingredientSelect">
+
+                    <option value="">
+                        Loading ingredients...
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- QUANTITY -->
+
+            <div class="form-group">
+
+                <label>
+                    Quantity Used
+                </label>
+
+                <input
+                    type="number"
+                    id="quantity"
+                    min="0.001"
+                    step="0.001"
+                    placeholder="Example: 0.25"
+                >
+
+            </div>
+
+
+            <!-- UNIT -->
+
+            <div class="form-group">
+
+                <label>
+                    Unit
+                </label>
+
+                <select id="unit">
+
+                    <option value="kg">
+                        kg
+                    </option>
+
+                    <option value="gram">
+                        gram
+                    </option>
+
+                    <option value="litre">
+                        litre
+                    </option>
+
+                    <option value="ml">
+                        ml
+                    </option>
+
+                    <option value="piece">
+                        piece
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="add-btn"
+            onclick="addUsage()"
+        >
+            Assign Ingredient
+        </button>
+
+
+        <div
+            id="status"
+            class="status"
+        ></div>
+
+    </div>
+
+
+
+    <!-- =================================================
+    USAGE TABLE
+    ================================================= -->
+
+    <div class="card">
+
+        <h2>Food Ingredient List</h2>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Food
+                        </th>
+
+                        <th>
+                            Ingredient
+                        </th>
+
+                        <th>
+                            Quantity
+                        </th>
+
+                        <th>
+                            Unit
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="usageTable">
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="empty"
+                        >
+                            Loading...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+// ======================================================
+// API
+// ======================================================
+
+const FOOD_API = "/api/foods";
+
+const INVENTORY_API = "/api/inventory";
+
+
+// ======================================================
+// SHOW STATUS
+// ======================================================
+
+function showStatus(message, type) {
+
+    const status =
+        document.getElementById("status");
+
+    status.textContent = message;
+
+    status.className =
+        "status " + type;
+
+    status.style.display = "block";
+
+    setTimeout(() => {
+
+        status.style.display = "none";
+
+    }, 3000);
+
+}
+
+
+// ======================================================
+// LOAD FOODS
+// ======================================================
+
+async function loadFoods() {
+
+    const select =
+        document.getElementById(
+            "foodSelect"
+        );
+
+    try {
+
+        const response =
+            await fetch(FOOD_API);
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Food API returned " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "FOODS:",
+            data
+        );
+
+
+        select.innerHTML =
+            `<option value="">
+                Select Food
+            </option>`;
+
+
+        if (
+            !Array.isArray(data) ||
+            data.length === 0
+        ) {
+
+            select.innerHTML =
+                `<option value="">
+                    No foods available
+                </option>`;
+
+            return;
+
+        }
+
+
+        data.forEach(food => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                food.id;
+
+            option.textContent =
+                `${food.name} - ₹${food.price}`;
+
+            select.appendChild(option);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "FOOD ERROR:",
+            error
+        );
+
+
+        select.innerHTML =
+            `<option value="">
+                Failed to load foods
+            </option>`;
+
+    }
+
+}
+
+
+// ======================================================
+// LOAD INGREDIENTS
+// ======================================================
+
+async function loadIngredients() {
+
+    const select =
+        document.getElementById(
+            "ingredientSelect"
+        );
+
+    try {
+
+        const response =
+            await fetch(
+                INVENTORY_API,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        console.log(
+            "INVENTORY STATUS:",
+            response.status
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Inventory API returned " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "INGREDIENTS:",
+            data
+        );
+
+
+        select.innerHTML =
+            `<option value="">
+                Select Ingredient
+            </option>`;
+
+
+        if (
+            !Array.isArray(data) ||
+            data.length === 0
+        ) {
+
+            select.innerHTML =
+                `<option value="">
+                    No ingredients available
+                </option>`;
+
+            return;
+
+        }
+
+
+        data.forEach(ingredient => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                ingredient.id;
+
+
+            option.textContent =
+                `${ingredient.name} - ${ingredient.stock} ${ingredient.unit}`;
+
+
+            select.appendChild(option);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "INGREDIENT ERROR:",
+            error
+        );
+
+
+        select.innerHTML =
+            `<option value="">
+                Failed to load ingredients
+            </option>`;
+
+    }
+
+}
+
+
+// ======================================================
+// LOAD USAGE
+// ======================================================
+
+async function loadUsage() {
+
+    const table =
+        document.getElementById(
+            "usageTable"
+        );
+
+    try {
+
+        const response =
+            await fetch(
+                INVENTORY_API +
+                "/usage/all"
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Usage API returned " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        table.innerHTML = "";
+
+
+        if (
+            !Array.isArray(data) ||
+            data.length === 0
+        ) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        class="empty"
+                    >
+
+                        No ingredient assignments yet.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        data.forEach(item => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${item.food_name}
+                </td>
+
+                <td>
+                    ${item.ingredient_name}
+                </td>
+
+                <td>
+                    ${item.quantity}
+                </td>
+
+                <td>
+                    ${item.unit}
+                </td>
+
+                <td>
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteUsage(${item.id})"
+                    >
+                        Delete
+                    </button>
+
+                </td>
+
+            `;
+
+
+            table.appendChild(row);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "USAGE ERROR:",
+            error
+        );
+
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="5"
+                    class="empty"
+                >
+
+                    Failed to load ingredient usage.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+// ======================================================
+// ADD USAGE
+// ======================================================
+
+async function addUsage() {
+
+    const foodId =
+        document.getElementById(
+            "foodSelect"
+        ).value;
+
+
+    const ingredientId =
+        document.getElementById(
+            "ingredientSelect"
+        ).value;
+
+
+    const quantity =
+        document.getElementById(
+            "quantity"
+        ).value;
+
+
+    const unit =
+        document.getElementById(
+            "unit"
+        ).value;
+
+
+    if (
+        !foodId ||
+        !ingredientId ||
+        !quantity
+    ) {
+
+        alert(
+            "Please fill all fields"
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                INVENTORY_API +
+                "/usage",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body: JSON.stringify({
+
+                        food_id:
+                            Number(foodId),
+
+                        ingredient_id:
+                            Number(ingredientId),
+
+                        quantity:
+                            Number(quantity),
+
+                        unit:
+                            unit
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            alert(
+                data.message ||
+                "Failed to assign ingredient"
+            );
+
+            return;
+
+        }
+
+
+        alert(
+            "Ingredient assigned successfully!"
+        );
+
+
+        document.getElementById(
+            "foodSelect"
+        ).value = "";
+
+
+        document.getElementById(
+            "ingredientSelect"
+        ).value = "";
+
+
+        document.getElementById(
+            "quantity"
+        ).value = "";
+
+
+        loadUsage();
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+        alert(
+            "Server error"
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// DELETE USAGE
+// ======================================================
+
+async function deleteUsage(id) {
+
+    if (
+        !confirm(
+            "Remove this ingredient assignment?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                INVENTORY_API +
+                "/usage/" +
+                id,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            alert(
+                data.message ||
+                "Delete failed"
+            );
+
+            return;
+
+        }
+
+
+        loadUsage();
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+        alert(
+            "Server error"
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// START
+// ======================================================
+
+async function initialize() {
+
+    await loadFoods();
+
+    await loadIngredients();
+
+    await loadUsage();
+
+}
+
+
+initialize();
+
+</script>
+
+
+</body>
+
+</html>

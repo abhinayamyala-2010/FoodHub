@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>FoodHub - Cart</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+
+        body {
+            background: #f5f5f5;
+            color: #222;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        nav {
+            background: #111827;
+            color: white;
+
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+
+        .logo {
+            color: #f97316;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+
+        .nav-links a:hover {
+            color: #f97316;
+        }
+
+
+        .cart-nav {
+            background: #f97316;
+            padding: 9px 15px;
+            border-radius: 6px;
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 36px;
+        }
+
+
+        /* =========================
+           CART LAYOUT
+        ========================= */
+
+        .cart-layout {
+            display: grid;
+            grid-template-columns: 1fr 330px;
+            gap: 25px;
+            align-items: start;
+        }
+
+
+        /* =========================
+           CART ITEMS
+        ========================= */
+
+        .cart-items {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+
+            box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding: 20px 0;
+
+            border-bottom: 1px solid #eee;
+        }
+
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+
+        .food-info {
+            flex: 1;
+        }
+
+
+        .food-name {
+            font-size: 19px;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+
+        .food-category {
+            color: #f97316;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+
+        .food-price {
+            color: #16a34a;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+
+        .quantity-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+
+        .quantity-btn {
+            width: 32px;
+            height: 32px;
+
+            border: none;
+            border-radius: 5px;
+
+            background: #111827;
+            color: white;
+
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+
+        .quantity-btn:hover {
+            background: #f97316;
+        }
+
+
+        .quantity {
+            min-width: 25px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+
+        .item-total {
+            min-width: 90px;
+            text-align: right;
+
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+
+        .remove-btn {
+            background: #dc2626;
+            color: white;
+
+            border: none;
+
+            padding: 8px 11px;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+        }
+
+
+        .remove-btn:hover {
+            background: #b91c1c;
+        }
+
+
+        /* =========================
+           SUMMARY
+        ========================= */
+
+        .summary {
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0.08);
+
+            position: sticky;
+            top: 20px;
+        }
+
+
+        .summary h2 {
+            margin-bottom: 20px;
+        }
+
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+
+            margin-bottom: 15px;
+
+            color: #555;
+        }
+
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+
+            border-top: 1px solid #ddd;
+
+            padding-top: 18px;
+            margin-top: 15px;
+
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+
+        .checkout-btn {
+            width: 100%;
+
+            padding: 14px;
+
+            margin-top: 22px;
+
+            background: #f97316;
+            color: white;
+
+            border: none;
+
+            border-radius: 8px;
+
+            font-size: 17px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .checkout-btn:hover {
+            background: #ea580c;
+        }
+
+
+        .clear-btn {
+            width: 100%;
+
+            padding: 12px;
+
+            margin-top: 10px;
+
+            background: #fee2e2;
+            color: #dc2626;
+
+            border: 1px solid #fecaca;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+        }
+
+
+        .clear-btn:hover {
+            background: #fecaca;
+        }
+
+
+        /* =========================
+           EMPTY CART
+        ========================= */
+
+        .empty-cart {
+            background: white;
+
+            padding: 70px 20px;
+
+            border-radius: 12px;
+
+            text-align: center;
+
+            box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+
+        .empty-cart-icon {
+            font-size: 65px;
+            margin-bottom: 20px;
+        }
+
+
+        .empty-cart h2 {
+            margin-bottom: 10px;
+        }
+
+
+        .empty-cart p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+
+        .menu-btn {
+            display: inline-block;
+
+            background: #f97316;
+            color: white;
+
+            padding: 12px 25px;
+
+            border-radius: 7px;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+
+        .menu-btn:hover {
+            background: #ea580c;
+        }
+
+
+        /* =========================
+           LOADING
+        ========================= */
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            margin-top: 60px;
+
+            background: #111827;
+
+            color: white;
+
+            text-align: center;
+
+            padding: 25px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            nav {
+                padding: 15px 20px;
+            }
+
+
+            .nav-links {
+                gap: 10px;
+            }
+
+
+            .nav-links a {
+                font-size: 12px;
+            }
+
+
+            .cart-layout {
+                grid-template-columns: 1fr;
+            }
+
+
+            .summary {
+                position: static;
+            }
+
+
+            .cart-item {
+                flex-wrap: wrap;
+            }
+
+
+            .item-total {
+                text-align: left;
+            }
+
+        }
+
+    </style>
+
+
+<style id="foodhub-cafe-theme">
+:root{--cafe-espresso:#3b2418;--cafe-coffee:#5a3825;--cafe-caramel:#b9783f;--cafe-gold:#d6a15d;--cafe-cream:#fff8ed;--cafe-beige:#f3e5d0;--cafe-latte:#ead4b7;--cafe-text:#2f211a;--cafe-white:#fffdf9;--cafe-shadow:0 8px 24px rgba(59,36,24,.12)}
+html,body{background:var(--cafe-cream)!important;color:var(--cafe-text)!important}
+body{font-family:Georgia,'Times New Roman',serif!important}
+header,.header,.navbar,nav,.nav,.topbar,.sidebar{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+header a,.header a,.navbar a,nav a,.nav a,.topbar a,.sidebar a{color:#fff8ed!important}
+h1,h2,h3,h4,h5,h6{color:var(--cafe-espresso)!important}
+button,.btn,.button,input[type=submit],input[type=button]{background:var(--cafe-coffee)!important;color:#fff8ed!important;border-color:var(--cafe-coffee)!important;border-radius:10px!important;box-shadow:0 3px 8px rgba(59,36,24,.16)!important}
+button:hover,.btn:hover,.button:hover,input[type=submit]:hover,input[type=button]:hover{background:var(--cafe-caramel)!important;border-color:var(--cafe-caramel)!important}
+a{color:var(--cafe-coffee)}
+a:hover{color:var(--cafe-caramel)}
+.card,.food-card,.menu-card,.product-card,.order-card,.stat-card,.box,.panel,.container-card,.admin-card,.reservation-card,.review-card,.table-card,.modal-content{background:var(--cafe-white)!important;border-color:var(--cafe-latte)!important;box-shadow:var(--cafe-shadow)!important;border-radius:14px!important}
+input,select,textarea{background:#fffdf9!important;color:var(--cafe-text)!important;border:1px solid #d8b994!important;border-radius:8px!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--cafe-caramel)!important;box-shadow:0 0 0 3px rgba(185,120,63,.15)!important}
+th{background:var(--cafe-coffee)!important;color:#fff8ed!important}
+tr:nth-child(even){background:#fbf1e2!important}
+.badge,.status,.tag,.category{background:var(--cafe-beige)!important;color:var(--cafe-espresso)!important}
+.logo,.brand{color:var(--cafe-gold)!important}
+footer{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+img{border-radius:10px}
+hr{border-color:var(--cafe-latte)!important}
+.cafe-theme-badge{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--cafe-beige);color:var(--cafe-espresso);font-size:13px;font-weight:700;letter-spacing:.4px}
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav>
+
+    <div class="logo">
+        🍴 FoodHub
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="menu.html">
+            Menu
+        </a>
+
+        <a href="orders.html">
+            Orders
+        </a>
+
+        <a href="reservation.html">
+            Reservation
+        </a>
+
+        <a
+            href="cart.html"
+            class="cart-nav"
+        >
+            🛒 Cart
+            (<span id="navCartCount">0</span>)
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="container">
+
+    <h1>
+        🛒 Your Cart
+    </h1>
+
+
+    <!-- CART AREA -->
+
+    <div id="cartArea">
+
+        <div class="loading">
+            Loading cart...
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    <p>
+        © 2026 FoodHub Restaurant.
+        All Rights Reserved.
+    </p>
+
+</footer>
+
+
+
+<script>
+
+
+const API_URL = "/api";
+
+
+let foods = [];
+
+let cart = [];
+
+
+// ==========================================
+// LOAD CART
+// ==========================================
+
+async function loadCart() {
+
+    try {
+
+        // Get cart from browser
+
+        cart =
+            JSON.parse(
+                localStorage.getItem(
+                    "foodhubCart"
+                )
+            ) || [];
+
+
+        // Get foods from database
+
+        const response =
+            await fetch(
+                `${API_URL}/foods`
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to load foods"
+            );
+
+        }
+
+
+        foods =
+            await response.json();
+
+
+        // Remove invalid old cart items
+
+        cleanCart();
+
+
+        // Display cart
+
+        displayCart();
+
+
+        // Update navbar
+
+        updateCartCount();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        document.getElementById(
+            "cartArea"
+        ).innerHTML = `
+
+            <div class="empty-cart">
+
+                <div class="empty-cart-icon">
+                    ⚠️
+                </div>
+
+                <h2>
+                    Unable to load cart
+                </h2>
+
+                <p>
+                    Please make sure the FoodHub
+                    server is running.
+                </p>
+
+                <a
+                    href="menu.html"
+                    class="menu-btn"
+                >
+                    Go to Menu
+                </a>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+// ==========================================
+// CLEAN INVALID CART ITEMS
+// ==========================================
+
+function cleanCart() {
+
+    const validFoodIds =
+        foods.map(
+            food => Number(food.id)
+        );
+
+
+    cart =
+        cart.filter(item => {
+
+            const foodId =
+                Number(item.food_id);
+
+            const quantity =
+                Number(item.quantity);
+
+
+            return (
+                validFoodIds.includes(foodId)
+                &&
+                quantity > 0
+            );
+
+        });
+
+
+    localStorage.setItem(
+        "foodhubCart",
+        JSON.stringify(cart)
+    );
+
+}
+
+
+// ==========================================
+// DISPLAY CART
+// ==========================================
+
+function displayCart() {
+
+    const cartArea =
+        document.getElementById(
+            "cartArea"
+        );
+
+
+    if (cart.length === 0) {
+
+        cartArea.innerHTML = `
+
+            <div class="empty-cart">
+
+                <div class="empty-cart-icon">
+                    🛒
+                </div>
+
+                <h2>
+                    Your cart is empty
+                </h2>
+
+                <p>
+                    Add some delicious food
+                    from our menu.
+                </p>
+
+                <a
+                    href="menu.html"
+                    class="menu-btn"
+                >
+                    🍽️ Browse Menu
+                </a>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    let subtotal = 0;
+
+    let totalItems = 0;
+
+
+    let itemsHTML = "";
+
+
+    cart.forEach((item, index) => {
+
+        const food =
+            foods.find(
+                f =>
+                    Number(f.id) ===
+                    Number(item.food_id)
+            );
+
+
+        if (!food) {
+            return;
+        }
+
+
+        const quantity =
+            Number(item.quantity);
+
+
+        const price =
+            Number(food.price);
+
+
+        const itemTotal =
+            price * quantity;
+
+
+        subtotal += itemTotal;
+
+        totalItems += quantity;
+
+
+        itemsHTML += `
+
+            <div class="cart-item">
+
+
+                <div class="food-info">
+
+                    <div class="food-name">
+                        ${escapeHTML(food.name)}
+                    </div>
+
+                    <div class="food-category">
+                        ${escapeHTML(
+                            food.category ||
+                            "Food"
+                        )}
+                    </div>
+
+                    <div class="food-price">
+                        ₹${price.toFixed(0)}
+                        each
+                    </div>
+
+                </div>
+
+
+                <div class="quantity-section">
+
+                    <button
+                        class="quantity-btn"
+                        onclick="decreaseQuantity(${index})"
+                    >
+                        −
+                    </button>
+
+
+                    <span class="quantity">
+                        ${quantity}
+                    </span>
+
+
+                    <button
+                        class="quantity-btn"
+                        onclick="increaseQuantity(${index})"
+                    >
+                        +
+                    </button>
+
+                </div>
+
+
+                <div class="item-total">
+
+                    ₹${itemTotal.toFixed(0)}
+
+                </div>
+
+
+                <button
+                    class="remove-btn"
+                    onclick="removeItem(${index})"
+                >
+                    Remove
+                </button>
+
+
+            </div>
+
+        `;
+
+    });
+
+
+    // ======================================
+    // SUMMARY
+    // ======================================
+
+    const deliveryCharge =
+        subtotal >= 500
+            ? 0
+            : 40;
+
+
+    const grandTotal =
+        subtotal + deliveryCharge;
+
+
+    cartArea.innerHTML = `
+
+        <div class="cart-layout">
+
+
+            <!-- ITEMS -->
+
+            <div class="cart-items">
+
+                ${itemsHTML}
+
+            </div>
+
+
+            <!-- SUMMARY -->
+
+            <div class="summary">
+
+                <h2>
+                    Order Summary
+                </h2>
+
+
+                <div class="summary-row">
+
+                    <span>
+                        Items
+                    </span>
+
+                    <span>
+                        ${totalItems}
+                    </span>
+
+                </div>
+
+
+                <div class="summary-row">
+
+                    <span>
+                        Subtotal
+                    </span>
+
+                    <span>
+                        ₹${subtotal.toFixed(0)}
+                    </span>
+
+                </div>
+
+
+                <div class="summary-row">
+
+                    <span>
+                        Delivery
+                    </span>
+
+                    <span>
+
+                        ${
+                            deliveryCharge === 0
+                            ? "FREE"
+                            : "₹" +
+                              deliveryCharge
+                        }
+
+                    </span>
+
+                </div>
+
+
+                <div class="summary-total">
+
+                    <span>
+                        Total
+                    </span>
+
+                    <span>
+                        ₹${grandTotal.toFixed(0)}
+                    </span>
+
+                </div>
+
+
+                <button
+                    class="checkout-btn"
+                    onclick="goToCheckout()"
+                >
+                    Proceed to Checkout
+                </button>
+
+
+                <button
+                    class="clear-btn"
+                    onclick="clearCart()"
+                >
+                    Clear Cart
+                </button>
+
+            </div>
+
+
+        </div>
+
+    `;
+
+}
+
+
+// ==========================================
+// INCREASE QUANTITY
+// ==========================================
+
+function increaseQuantity(index) {
+
+    if (!cart[index]) {
+        return;
+    }
+
+
+    cart[index].quantity =
+        Number(cart[index].quantity) + 1;
+
+
+    saveCart();
+
+}
+
+
+// ==========================================
+// DECREASE QUANTITY
+// ==========================================
+
+function decreaseQuantity(index) {
+
+    if (!cart[index]) {
+        return;
+    }
+
+
+    cart[index].quantity =
+        Number(cart[index].quantity) - 1;
+
+
+    if (
+        Number(cart[index].quantity) <= 0
+    ) {
+
+        cart.splice(index, 1);
+
+    }
+
+
+    saveCart();
+
+}
+
+
+// ==========================================
+// REMOVE ITEM
+// ==========================================
+
+function removeItem(index) {
+
+    if (!cart[index]) {
+        return;
+    }
+
+
+    const food =
+        foods.find(
+            f =>
+                Number(f.id) ===
+                Number(cart[index].food_id)
+        );
+
+
+    const name =
+        food
+            ? food.name
+            : "this item";
+
+
+    const confirmRemove =
+        confirm(
+            `Remove ${name} from cart?`
+        );
+
+
+    if (!confirmRemove) {
+        return;
+    }
+
+
+    cart.splice(index, 1);
+
+
+    saveCart();
+
+}
+
+
+// ==========================================
+// CLEAR CART
+// ==========================================
+
+function clearCart() {
+
+    if (cart.length === 0) {
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to clear the cart?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    cart = [];
+
+
+    saveCart();
+
+}
+
+
+// ==========================================
+// SAVE CART
+// ==========================================
+
+function saveCart() {
+
+    localStorage.setItem(
+        "foodhubCart",
+        JSON.stringify(cart)
+    );
+
+
+    updateCartCount();
+
+
+    displayCart();
+
+}
+
+
+// ==========================================
+// UPDATE CART COUNT
+// ==========================================
+
+function updateCartCount() {
+
+    let count = 0;
+
+
+    cart.forEach(item => {
+
+        count +=
+            Number(item.quantity) || 0;
+
+    });
+
+
+    const countElement =
+        document.getElementById(
+            "navCartCount"
+        );
+
+
+    if (countElement) {
+
+        countElement.textContent =
+            count;
+
+    }
+
+}
+
+
+// ==========================================
+// CHECKOUT
+// ==========================================
+
+function goToCheckout() {
+
+    if (cart.length === 0) {
+
+        alert(
+            "Your cart is empty."
+        );
+
+        return;
+
+    }
+
+
+    const user =
+        JSON.parse(
+            localStorage.getItem(
+                "foodhubUser"
+            )
+        );
+
+
+    if (!user) {
+
+        alert(
+            "Please login before checkout."
+        );
+
+
+        window.location.href =
+            "login.html";
+
+
+        return;
+
+    }
+
+
+    window.location.href =
+        "checkout.html";
+
+}
+
+
+// ==========================================
+// ESCAPE HTML
+// ==========================================
+
+function escapeHTML(value) {
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+// ==========================================
+// START
+// ==========================================
+
+loadCart();
+
+</script>
+
+
+</body>
+
+</html>

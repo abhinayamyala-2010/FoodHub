@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FoodHub - Menu</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            background: #111827;
+            color: white;
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: #f97316;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .nav-links a:hover {
+            color: #f97316;
+        }
+
+        .cart-link {
+            background: #f97316;
+            padding: 9px 15px;
+            border-radius: 6px;
+        }
+
+        /* HEADER */
+
+        .header {
+            text-align: center;
+            padding: 45px 20px 25px;
+        }
+
+        .header h1 {
+            font-size: 38px;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 17px;
+        }
+
+        /* SEARCH */
+
+        .search-box {
+            width: 90%;
+            max-width: 700px;
+            margin: 10px auto 25px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 16px;
+            outline: none;
+            background: white;
+        }
+
+        .search-box input:focus {
+            border-color: #f97316;
+        }
+
+        /* CATEGORIES */
+
+        .categories {
+            width: 95%;
+            max-width: 1200px;
+            margin: 0 auto 30px;
+
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .category-btn {
+            border: none;
+            background: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 2px 7px rgba(0,0,0,0.08);
+        }
+
+        .category-btn:hover {
+            background: #f97316;
+            color: white;
+        }
+
+        .category-btn.active {
+            background: #f97316;
+            color: white;
+        }
+
+        /* MENU */
+
+        .menu-container {
+            width: 92%;
+            max-width: 1300px;
+            margin: auto;
+
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 22px;
+        }
+
+        /* FOOD CARD */
+
+        .food-card {
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: 0.2s;
+        }
+
+        .food-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.13);
+        }
+
+        .food-image {
+            height: 150px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 60px;
+            background: linear-gradient(
+                135deg,
+                #fff7ed,
+                #ffedd5
+            );
+        }
+
+        .food-content {
+            padding: 18px;
+        }
+
+        .food-category {
+            color: #f97316;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .food-name {
+            font-size: 19px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .food-description {
+            color: #666;
+            font-size: 13px;
+            min-height: 38px;
+            margin-bottom: 12px;
+        }
+
+        .food-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .food-price {
+            color: #16a34a;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .add-btn {
+            background: #f97316;
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .add-btn:hover {
+            background: #ea580c;
+        }
+
+        /* LOADING */
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            font-size: 20px;
+            color: #666;
+        }
+
+        .no-food {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 60px;
+            color: #666;
+            font-size: 18px;
+        }
+
+        /* TOAST */
+
+        #toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+
+            background: #111827;
+            color: white;
+
+            padding: 15px 22px;
+            border-radius: 8px;
+
+            display: none;
+            z-index: 1000;
+
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* FOOTER */
+
+        footer {
+            margin-top: 60px;
+            background: #111827;
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            nav {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                gap: 10px;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+            }
+
+            .header h1 {
+                font-size: 30px;
+            }
+
+            .menu-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+<style id="foodhub-cafe-theme">
+:root{--cafe-espresso:#3b2418;--cafe-coffee:#5a3825;--cafe-caramel:#b9783f;--cafe-gold:#d6a15d;--cafe-cream:#fff8ed;--cafe-beige:#f3e5d0;--cafe-latte:#ead4b7;--cafe-text:#2f211a;--cafe-white:#fffdf9;--cafe-shadow:0 8px 24px rgba(59,36,24,.12)}
+html,body{background:var(--cafe-cream)!important;color:var(--cafe-text)!important}
+body{font-family:Georgia,'Times New Roman',serif!important}
+header,.header,.navbar,nav,.nav,.topbar,.sidebar{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+header a,.header a,.navbar a,nav a,.nav a,.topbar a,.sidebar a{color:#fff8ed!important}
+h1,h2,h3,h4,h5,h6{color:var(--cafe-espresso)!important}
+button,.btn,.button,input[type=submit],input[type=button]{background:var(--cafe-coffee)!important;color:#fff8ed!important;border-color:var(--cafe-coffee)!important;border-radius:10px!important;box-shadow:0 3px 8px rgba(59,36,24,.16)!important}
+button:hover,.btn:hover,.button:hover,input[type=submit]:hover,input[type=button]:hover{background:var(--cafe-caramel)!important;border-color:var(--cafe-caramel)!important}
+a{color:var(--cafe-coffee)}
+a:hover{color:var(--cafe-caramel)}
+.card,.food-card,.menu-card,.product-card,.order-card,.stat-card,.box,.panel,.container-card,.admin-card,.reservation-card,.review-card,.table-card,.modal-content{background:var(--cafe-white)!important;border-color:var(--cafe-latte)!important;box-shadow:var(--cafe-shadow)!important;border-radius:14px!important}
+input,select,textarea{background:#fffdf9!important;color:var(--cafe-text)!important;border:1px solid #d8b994!important;border-radius:8px!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--cafe-caramel)!important;box-shadow:0 0 0 3px rgba(185,120,63,.15)!important}
+th{background:var(--cafe-coffee)!important;color:#fff8ed!important}
+tr:nth-child(even){background:#fbf1e2!important}
+.badge,.status,.tag,.category{background:var(--cafe-beige)!important;color:var(--cafe-espresso)!important}
+.logo,.brand{color:var(--cafe-gold)!important}
+footer{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+img{border-radius:10px}
+hr{border-color:var(--cafe-latte)!important}
+.cafe-theme-badge{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--cafe-beige);color:var(--cafe-espresso);font-size:13px;font-weight:700;letter-spacing:.4px}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav>
+
+    <div class="logo">
+        🍴 FoodHub
+    </div>
+
+    <div class="nav-links">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="menu.html">
+            Menu
+        </a>
+
+        <a href="orders.html">
+            Orders
+        </a>
+
+        <a href="reservation.html">
+            Reservation
+        </a>
+
+        <a href="cart.html" class="cart-link">
+            🛒 Cart
+            (<span id="cartCount">0</span>)
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<section class="header">
+
+    <h1>🍽️ Our Menu</h1>
+
+    <p>
+        Delicious food prepared fresh for you
+    </p>
+
+</section>
+
+
+<!-- =========================
+     SEARCH
+========================= -->
+
+<div class="search-box">
+
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="🔍 Search food..."
+        oninput="searchFoods()"
+    >
+
+</div>
+
+
+<!-- =========================
+     CATEGORIES
+========================= -->
+
+<div
+    class="categories"
+    id="categories"
+>
+
+    <button
+        class="category-btn active"
+        onclick="filterCategory('All', this)"
+    >
+        All
+    </button>
+
+</div>
+
+
+<!-- =========================
+     MENU
+========================= -->
+
+<div
+    class="menu-container"
+    id="menuContainer"
+>
+
+    <div class="loading">
+        Loading menu...
+    </div>
+
+</div>
+
+
+<!-- =========================
+     TOAST
+========================= -->
+
+<div id="toast">
+    Food added to cart!
+</div>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    <p>
+        © 2026 FoodHub Restaurant.
+        All Rights Reserved.
+    </p>
+
+</footer>
+
+
+<script>
+
+const API_URL = "/api";
+
+let allFoods = [];
+
+let selectedCategory = "All";
+
+
+// ==========================================
+// LOAD FOODS
+// ==========================================
+
+async function loadFoods() {
+
+    const container =
+        document.getElementById("menuContainer");
+
+    try {
+
+        const response =
+            await fetch(`${API_URL}/foods`);
+
+        if (!response.ok) {
+            throw new Error("Failed to load foods");
+        }
+
+        allFoods =
+            await response.json();
+
+        createCategories();
+
+        displayFoods(allFoods);
+
+        updateCartCount();
+
+    } catch (error) {
+
+        console.error(error);
+
+        container.innerHTML = `
+
+            <div class="no-food">
+
+                ❌ Unable to load menu.
+
+                <br><br>
+
+                Make sure the FoodHub server is running.
+
+            </div>
+
+        `;
+    }
+}
+
+
+// ==========================================
+// CREATE CATEGORY BUTTONS
+// ==========================================
+
+function createCategories() {
+
+    const categoryContainer =
+        document.getElementById("categories");
+
+    const categories = [
+        ...new Set(
+            allFoods
+                .map(food => food.category)
+                .filter(category => category)
+        )
+    ];
+
+    categoryContainer.innerHTML = `
+
+        <button
+            class="category-btn active"
+            onclick="filterCategory('All', this)"
+        >
+            All
+        </button>
+
+    `;
+
+    categories.sort();
+
+    categories.forEach(category => {
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "category-btn";
+
+        button.textContent =
+            category;
+
+        button.onclick = function() {
+
+            filterCategory(
+                category,
+                this
+            );
+
+        };
+
+        categoryContainer.appendChild(button);
+
+    });
+}
+
+
+// ==========================================
+// DISPLAY FOODS
+// ==========================================
+
+function displayFoods(foods) {
+
+    const container =
+        document.getElementById("menuContainer");
+
+
+    if (!foods.length) {
+
+        container.innerHTML = `
+
+            <div class="no-food">
+
+                😔 No food found.
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    foods.forEach(food => {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "food-card";
+
+
+        const emoji =
+            getFoodEmoji(food.category);
+
+
+        card.innerHTML = `
+
+            <div class="food-image">
+                ${emoji}
+            </div>
+
+            <div class="food-content">
+
+                <div class="food-category">
+                    ${escapeHTML(food.category || "Food")}
+                </div>
+
+                <div class="food-name">
+                    ${escapeHTML(food.name)}
+                </div>
+
+                <div class="food-description">
+                    ${
+                        escapeHTML(
+                            food.description ||
+                            "Delicious food prepared fresh for you."
+                        )
+                    }
+                </div>
+
+                <div class="food-bottom">
+
+                    <div class="food-price">
+                        ₹${Number(food.price).toFixed(0)}
+                    </div>
+
+                    <button
+                        class="add-btn"
+                        onclick="addToCart(${Number(food.id)})"
+                    >
+                        Add to Cart
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        container.appendChild(card);
+
+    });
+}
+
+
+// ==========================================
+// FILTER CATEGORY
+// ==========================================
+
+function filterCategory(category, button) {
+
+    selectedCategory =
+        category;
+
+
+    document
+        .querySelectorAll(".category-btn")
+        .forEach(btn => {
+
+            btn.classList.remove("active");
+
+        });
+
+
+    button.classList.add("active");
+
+
+    applyFilters();
+}
+
+
+// ==========================================
+// SEARCH
+// ==========================================
+
+function searchFoods() {
+
+    applyFilters();
+}
+
+
+// ==========================================
+// APPLY SEARCH + CATEGORY
+// ==========================================
+
+function applyFilters() {
+
+    const search =
+        document
+            .getElementById("searchInput")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    let filtered =
+        allFoods;
+
+
+    if (selectedCategory !== "All") {
+
+        filtered =
+            filtered.filter(
+                food =>
+                    food.category ===
+                    selectedCategory
+            );
+
+    }
+
+
+    if (search) {
+
+        filtered =
+            filtered.filter(food =>
+
+                food.name
+                    .toLowerCase()
+                    .includes(search)
+
+                ||
+
+                (food.category || "")
+                    .toLowerCase()
+                    .includes(search)
+
+                ||
+
+                (food.description || "")
+                    .toLowerCase()
+                    .includes(search)
+
+            );
+
+    }
+
+
+    displayFoods(filtered);
+}
+
+
+// ==========================================
+// ADD TO CART
+// ==========================================
+
+function addToCart(foodId) {
+
+    foodId =
+        Number(foodId);
+
+
+    // Get existing cart
+
+    let cart =
+        JSON.parse(
+            localStorage.getItem(
+                "foodhubCart"
+            )
+        ) || [];
+
+
+    // Find existing item
+
+    const existingItem =
+        cart.find(
+            item =>
+                Number(item.food_id) ===
+                foodId
+        );
+
+
+    if (existingItem) {
+
+        existingItem.quantity =
+            Number(existingItem.quantity) + 1;
+
+    } else {
+
+        cart.push({
+
+            food_id:
+                foodId,
+
+            quantity:
+                1
+
+        });
+
+    }
+
+
+    // Save exact format required by cart.html
+
+    localStorage.setItem(
+        "foodhubCart",
+        JSON.stringify(cart)
+    );
+
+
+    updateCartCount();
+
+    showToast(
+        "✅ Food added to cart!"
+    );
+}
+
+
+// ==========================================
+// CART COUNT
+// ==========================================
+
+function updateCartCount() {
+
+    const cart =
+        JSON.parse(
+            localStorage.getItem(
+                "foodhubCart"
+            )
+        ) || [];
+
+
+    let count = 0;
+
+
+    cart.forEach(item => {
+
+        count +=
+            Number(item.quantity) || 0;
+
+    });
+
+
+    document.getElementById(
+        "cartCount"
+    ).textContent = count;
+}
+
+
+// ==========================================
+// TOAST
+// ==========================================
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent =
+        message;
+
+    toast.style.display =
+        "block";
+
+
+    setTimeout(() => {
+
+        toast.style.display =
+            "none";
+
+    }, 2000);
+}
+
+
+// ==========================================
+// FOOD EMOJI
+// ==========================================
+
+function getFoodEmoji(category) {
+
+    if (!category) {
+        return "🍽️";
+    }
+
+
+    const c =
+        category.toLowerCase();
+
+
+    if (c.includes("biryani"))
+        return "🍛";
+
+    if (c.includes("drink"))
+        return "🥤";
+
+    if (c.includes("juice"))
+        return "🧃";
+
+    if (c.includes("dessert"))
+        return "🍰";
+
+    if (c.includes("cake"))
+        return "🍰";
+
+    if (c.includes("brownie"))
+        return "🍫";
+
+    if (c.includes("ice cream"))
+        return "🍨";
+
+    if (c.includes("waffle"))
+        return "🧇";
+
+    if (c.includes("pancake"))
+        return "🥞";
+
+    if (c.includes("noodle"))
+        return "🍜";
+
+    if (c.includes("rice"))
+        return "🍚";
+
+    if (c.includes("starter"))
+        return "🍗";
+
+    if (c.includes("chicken"))
+        return "🍗";
+
+    if (c.includes("mutton"))
+        return "🥩";
+
+    if (c.includes("fish"))
+        return "🐟";
+
+    if (c.includes("prawn"))
+        return "🍤";
+
+    if (c.includes("seafood"))
+        return "🦐";
+
+    if (c.includes("bread"))
+        return "🫓";
+
+    if (c.includes("thali"))
+        return "🍱";
+
+    if (c.includes("pulao"))
+        return "🍚";
+
+    return "🍽️";
+}
+
+
+// ==========================================
+// HTML ESCAPE
+// ==========================================
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+// ==========================================
+// START
+// ==========================================
+
+loadFoods();
+
+</script>
+
+</body>
+</html>

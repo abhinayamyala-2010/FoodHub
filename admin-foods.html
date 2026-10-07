@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>FoodHub - Admin Food Management</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        header {
+            background: #222;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .container {
+            padding: 30px;
+        }
+
+        .form-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px #ccc;
+            margin-bottom: 30px;
+        }
+
+        .form-box h2 {
+            margin-top: 0;
+            color: #ff5722;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .full {
+            grid-column: span 2;
+        }
+
+        button {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            background: #ff5722;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .cancel {
+            background: #777;
+            margin-left: 10px;
+        }
+
+        #message {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .foods-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px #ccc;
+        }
+
+        .foods-box h2 {
+            color: #ff5722;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #ff5722;
+            color: white;
+        }
+
+        .edit {
+            background: #2196f3;
+            margin-right: 5px;
+        }
+
+        .delete {
+            background: #f44336;
+        }
+
+        .available {
+            color: green;
+            font-weight: bold;
+        }
+
+        .unavailable {
+            color: red;
+            font-weight: bold;
+        }
+
+        @media(max-width: 700px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: span 1;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+        }
+
+    </style>
+
+
+<style id="foodhub-cafe-theme">
+:root{--cafe-espresso:#3b2418;--cafe-coffee:#5a3825;--cafe-caramel:#b9783f;--cafe-gold:#d6a15d;--cafe-cream:#fff8ed;--cafe-beige:#f3e5d0;--cafe-latte:#ead4b7;--cafe-text:#2f211a;--cafe-white:#fffdf9;--cafe-shadow:0 8px 24px rgba(59,36,24,.12)}
+html,body{background:var(--cafe-cream)!important;color:var(--cafe-text)!important}
+body{font-family:Georgia,'Times New Roman',serif!important}
+header,.header,.navbar,nav,.nav,.topbar,.sidebar{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+header a,.header a,.navbar a,nav a,.nav a,.topbar a,.sidebar a{color:#fff8ed!important}
+h1,h2,h3,h4,h5,h6{color:var(--cafe-espresso)!important}
+button,.btn,.button,input[type=submit],input[type=button]{background:var(--cafe-coffee)!important;color:#fff8ed!important;border-color:var(--cafe-coffee)!important;border-radius:10px!important;box-shadow:0 3px 8px rgba(59,36,24,.16)!important}
+button:hover,.btn:hover,.button:hover,input[type=submit]:hover,input[type=button]:hover{background:var(--cafe-caramel)!important;border-color:var(--cafe-caramel)!important}
+a{color:var(--cafe-coffee)}
+a:hover{color:var(--cafe-caramel)}
+.card,.food-card,.menu-card,.product-card,.order-card,.stat-card,.box,.panel,.container-card,.admin-card,.reservation-card,.review-card,.table-card,.modal-content{background:var(--cafe-white)!important;border-color:var(--cafe-latte)!important;box-shadow:var(--cafe-shadow)!important;border-radius:14px!important}
+input,select,textarea{background:#fffdf9!important;color:var(--cafe-text)!important;border:1px solid #d8b994!important;border-radius:8px!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--cafe-caramel)!important;box-shadow:0 0 0 3px rgba(185,120,63,.15)!important}
+th{background:var(--cafe-coffee)!important;color:#fff8ed!important}
+tr:nth-child(even){background:#fbf1e2!important}
+.badge,.status,.tag,.category{background:var(--cafe-beige)!important;color:var(--cafe-espresso)!important}
+.logo,.brand{color:var(--cafe-gold)!important}
+footer{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+img{border-radius:10px}
+hr{border-color:var(--cafe-latte)!important}
+.cafe-theme-badge{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--cafe-beige);color:var(--cafe-espresso);font-size:13px;font-weight:700;letter-spacing:.4px}
+</style>
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>FoodHub Admin</h1>
+
+    <nav>
+
+        <a href="menu.html">Menu</a>
+
+        <a href="admin-foods.html">
+            Food Management
+        </a>
+
+    </nav>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- ADD / EDIT FOOD -->
+
+    <div class="form-box">
+
+        <h2 id="formTitle">
+            Add New Food
+        </h2>
+
+
+        <div class="form-grid">
+
+
+            <div>
+
+                <label>Food Name</label>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Example: Chicken Biryani"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label>Category</label>
+
+                <select id="category">
+
+                    <option value="">
+                        Select Category
+                    </option>
+
+                    <option>Biryani</option>
+
+                    <option>Starters</option>
+
+                    <option>Main Course</option>
+
+                    <option>South Indian</option>
+
+                    <option>Rice</option>
+
+                    <option>Noodles</option>
+
+                    <option>Dessert</option>
+
+                    <option>Drinks</option>
+
+                </select>
+
+            </div>
+
+
+            <div>
+
+                <label>Price</label>
+
+                <input
+                    type="number"
+                    id="price"
+                    placeholder="Enter price"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label>Image</label>
+
+                <input
+                    type="text"
+                    id="image"
+                    placeholder="Example: biryani.jpg"
+                >
+
+            </div>
+
+
+            <div class="full">
+
+                <label>Description</label>
+
+                <textarea
+                    id="description"
+                    placeholder="Enter food description"
+                ></textarea>
+
+            </div>
+
+
+            <div class="full">
+
+                <button onclick="saveFood()">
+                    Save Food
+                </button>
+
+                <button
+                    class="cancel"
+                    onclick="cancelEdit()"
+                    id="cancelButton"
+                    style="display:none;"
+                >
+                    Cancel
+                </button>
+
+            </div>
+
+
+        </div>
+
+
+        <p id="message"></p>
+
+    </div>
+
+
+
+    <!-- FOOD LIST -->
+
+    <div class="foods-box">
+
+        <h2>Food List</h2>
+
+        <div id="foodList">
+
+            Loading foods...
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+let editingId = null;
+
+
+// =================================
+// LOAD FOODS
+// =================================
+
+async function loadFoods() {
+
+    try {
+
+        const response = await fetch(
+            "/api/foods"
+        );
+
+        const foods = await response.json();
+
+        const container =
+            document.getElementById("foodList");
+
+
+        if (foods.length === 0) {
+
+            container.innerHTML =
+                "<p>No foods available.</p>";
+
+            return;
+        }
+
+
+        let html = `
+
+            <table>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Food</th>
+
+                    <th>Category</th>
+
+                    <th>Price</th>
+
+                    <th>Status</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+        `;
+
+
+        foods.forEach(food => {
+
+            const status =
+                food.available == 1
+                    ? "Available"
+                    : "Unavailable";
+
+
+            const statusClass =
+                food.available == 1
+                    ? "available"
+                    : "unavailable";
+
+
+            html += `
+
+                <tr>
+
+                    <td>${food.id}</td>
+
+                    <td>${food.name}</td>
+
+                    <td>${food.category}</td>
+
+                    <td>₹${food.price}</td>
+
+                    <td class="${statusClass}">
+                        ${status}
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="edit"
+                            onclick="editFood(${food.id})"
+                        >
+                            Edit
+                        </button>
+
+                        <button
+                            class="delete"
+                            onclick="deleteFood(${food.id})"
+                        >
+                            Delete
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+
+        html += "</table>";
+
+        container.innerHTML = html;
+
+
+    } catch (error) {
+
+        document.getElementById("foodList").innerHTML =
+            "<p>Unable to load foods.</p>";
+
+    }
+
+}
+
+
+// =================================
+// SAVE FOOD
+// =================================
+
+async function saveFood() {
+
+    const name =
+        document.getElementById("name").value.trim();
+
+    const category =
+        document.getElementById("category").value;
+
+    const price =
+        document.getElementById("price").value;
+
+    const description =
+        document.getElementById("description").value;
+
+    const image =
+        document.getElementById("image").value;
+
+
+    if (!name || !category || !price) {
+
+        showMessage(
+            "Please enter food name, category and price.",
+            "red"
+        );
+
+        return;
+    }
+
+
+    const foodData = {
+
+        name,
+        category,
+        price,
+        description,
+        image,
+        available: 1
+
+    };
+
+
+    try {
+
+        let response;
+
+
+        // =========================
+        // EDIT
+        // =========================
+
+        if (editingId) {
+
+            response = await fetch(
+                `/api/foods/${editingId}`,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(foodData)
+                }
+            );
+
+        }
+
+
+        // =========================
+        // ADD
+        // =========================
+
+        else {
+
+            response = await fetch(
+                "/api/foods",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(foodData)
+                }
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (response.ok) {
+
+            showMessage(
+                data.message,
+                "green"
+            );
+
+            clearForm();
+
+            loadFoods();
+
+        } else {
+
+            showMessage(
+                data.message,
+                "red"
+            );
+
+        }
+
+
+    } catch (error) {
+
+        showMessage(
+            "Server connection failed.",
+            "red"
+        );
+
+    }
+
+}
+
+
+// =================================
+// EDIT FOOD
+// =================================
+
+async function editFood(id) {
+
+    try {
+
+        const response =
+            await fetch(`/api/foods/${id}`);
+
+        const food =
+            await response.json();
+
+
+        editingId = id;
+
+
+        document.getElementById("name").value =
+            food.name;
+
+        document.getElementById("category").value =
+            food.category;
+
+        document.getElementById("price").value =
+            food.price;
+
+        document.getElementById("description").value =
+            food.description || "";
+
+        document.getElementById("image").value =
+            food.image || "";
+
+
+        document.getElementById("formTitle").innerText =
+            "Edit Food";
+
+
+        document.getElementById("cancelButton").style.display =
+            "inline-block";
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+
+    } catch (error) {
+
+        alert("Unable to load food.");
+
+    }
+
+}
+
+
+// =================================
+// DELETE FOOD
+// =================================
+
+async function deleteFood(id) {
+
+    const confirmDelete =
+        confirm(
+            "Are you sure you want to delete this food?"
+        );
+
+
+    if (!confirmDelete) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/foods/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (response.ok) {
+
+            showMessage(
+                data.message,
+                "green"
+            );
+
+            loadFoods();
+
+        } else {
+
+            showMessage(
+                data.message,
+                "red"
+            );
+
+        }
+
+
+    } catch (error) {
+
+        showMessage(
+            "Server connection failed.",
+            "red"
+        );
+
+    }
+
+}
+
+
+// =================================
+// CANCEL EDIT
+// =================================
+
+function cancelEdit() {
+
+    clearForm();
+
+}
+
+
+// =================================
+// CLEAR FORM
+// =================================
+
+function clearForm() {
+
+    editingId = null;
+
+    document.getElementById("name").value = "";
+
+    document.getElementById("category").value = "";
+
+    document.getElementById("price").value = "";
+
+    document.getElementById("description").value = "";
+
+    document.getElementById("image").value = "";
+
+
+    document.getElementById("formTitle").innerText =
+        "Add New Food";
+
+
+    document.getElementById("cancelButton").style.display =
+        "none";
+
+}
+
+
+// =================================
+// MESSAGE
+// =================================
+
+function showMessage(message, color) {
+
+    const element =
+        document.getElementById("message");
+
+    element.innerText = message;
+
+    element.style.color = color;
+
+
+    setTimeout(() => {
+
+        element.innerText = "";
+
+    }, 3000);
+
+}
+
+
+// =================================
+// START
+// =================================
+
+loadFoods();
+
+</script>
+
+
+</body>
+
+</html>

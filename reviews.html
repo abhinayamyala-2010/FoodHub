@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>FoodHub - Reviews</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+
+        /* ==============================
+           NAVBAR
+        ============================== */
+
+        nav {
+            background: #111;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 {
+            margin: 0;
+            color: #ff6b00;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+
+        /* ==============================
+           MAIN CONTAINER
+        ============================== */
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+
+        /* ==============================
+           BOX
+        ============================== */
+
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+
+        h1,
+        h2,
+        h3 {
+            margin-top: 0;
+        }
+
+
+        /* ==============================
+           FOOD SELECT
+        ============================== */
+
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+            margin-top: 10px;
+        }
+
+
+        /* ==============================
+           STARS
+        ============================== */
+
+        .stars {
+            display: flex;
+            gap: 5px;
+            margin: 15px 0;
+        }
+
+        .star {
+            font-size: 38px;
+            cursor: pointer;
+            color: #ccc;
+            transition: 0.2s;
+        }
+
+        .star.active {
+            color: #ffb400;
+        }
+
+
+        /* ==============================
+           BUTTON
+        ============================== */
+
+        button {
+            border: none;
+            background: #ff6b00;
+            color: white;
+            padding: 13px 22px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background: #e65f00;
+        }
+
+        button:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+
+        /* ==============================
+           MESSAGE
+        ============================== */
+
+        .message {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+
+
+        /* ==============================
+           RATING SUMMARY
+        ============================== */
+
+        .rating-summary {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .average-rating {
+            font-size: 45px;
+            font-weight: bold;
+            color: #ffb400;
+        }
+
+        .rating-stars {
+            font-size: 30px;
+            color: #ffb400;
+        }
+
+        .review-count {
+            color: #666;
+            margin-top: 5px;
+        }
+
+
+        /* ==============================
+           REVIEW CARD
+        ============================== */
+
+        .review-card {
+            border-bottom: 1px solid #ddd;
+            padding: 20px 0;
+        }
+
+        .review-card:last-child {
+            border-bottom: none;
+        }
+
+        .customer-name {
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .review-stars {
+            color: #ffb400;
+            font-size: 20px;
+            margin: 6px 0;
+        }
+
+        .review-comment {
+            color: #444;
+            line-height: 1.5;
+        }
+
+        .review-date {
+            color: #888;
+            font-size: 13px;
+            margin-top: 7px;
+        }
+
+
+        /* ==============================
+           HIDDEN
+        ============================== */
+
+        .hidden {
+            display: none;
+        }
+
+
+        /* ==============================
+           MOBILE
+        ============================== */
+
+        @media(max-width: 700px) {
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav a {
+                margin-left: 8px;
+            }
+
+            .star {
+                font-size: 32px;
+            }
+
+        }
+
+    </style>
+
+
+<style id="foodhub-cafe-theme">
+:root{--cafe-espresso:#3b2418;--cafe-coffee:#5a3825;--cafe-caramel:#b9783f;--cafe-gold:#d6a15d;--cafe-cream:#fff8ed;--cafe-beige:#f3e5d0;--cafe-latte:#ead4b7;--cafe-text:#2f211a;--cafe-white:#fffdf9;--cafe-shadow:0 8px 24px rgba(59,36,24,.12)}
+html,body{background:var(--cafe-cream)!important;color:var(--cafe-text)!important}
+body{font-family:Georgia,'Times New Roman',serif!important}
+header,.header,.navbar,nav,.nav,.topbar,.sidebar{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+header a,.header a,.navbar a,nav a,.nav a,.topbar a,.sidebar a{color:#fff8ed!important}
+h1,h2,h3,h4,h5,h6{color:var(--cafe-espresso)!important}
+button,.btn,.button,input[type=submit],input[type=button]{background:var(--cafe-coffee)!important;color:#fff8ed!important;border-color:var(--cafe-coffee)!important;border-radius:10px!important;box-shadow:0 3px 8px rgba(59,36,24,.16)!important}
+button:hover,.btn:hover,.button:hover,input[type=submit]:hover,input[type=button]:hover{background:var(--cafe-caramel)!important;border-color:var(--cafe-caramel)!important}
+a{color:var(--cafe-coffee)}
+a:hover{color:var(--cafe-caramel)}
+.card,.food-card,.menu-card,.product-card,.order-card,.stat-card,.box,.panel,.container-card,.admin-card,.reservation-card,.review-card,.table-card,.modal-content{background:var(--cafe-white)!important;border-color:var(--cafe-latte)!important;box-shadow:var(--cafe-shadow)!important;border-radius:14px!important}
+input,select,textarea{background:#fffdf9!important;color:var(--cafe-text)!important;border:1px solid #d8b994!important;border-radius:8px!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--cafe-caramel)!important;box-shadow:0 0 0 3px rgba(185,120,63,.15)!important}
+th{background:var(--cafe-coffee)!important;color:#fff8ed!important}
+tr:nth-child(even){background:#fbf1e2!important}
+.badge,.status,.tag,.category{background:var(--cafe-beige)!important;color:var(--cafe-espresso)!important}
+.logo,.brand{color:var(--cafe-gold)!important}
+footer{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+img{border-radius:10px}
+hr{border-color:var(--cafe-latte)!important}
+.cafe-theme-badge{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--cafe-beige);color:var(--cafe-espresso);font-size:13px;font-weight:700;letter-spacing:.4px}
+</style>
+</head>
+
+
+<body>
+
+
+<!-- ==========================================
+     NAVBAR
+========================================== -->
+
+<nav>
+
+    <h2>
+        FoodHub
+    </h2>
+
+    <div>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="menu.html">
+            Menu
+        </a>
+
+        <a href="cart.html">
+            Cart
+        </a>
+
+        <a href="orders.html">
+            Orders
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ==========================================
+     MAIN
+========================================== -->
+
+<div class="container">
+
+
+    <!-- ======================================
+         WRITE REVIEW
+    ======================================= -->
+
+    <div class="box">
+
+        <h1>
+            ⭐ Write a Review
+        </h1>
+
+
+        <label>
+            Select Food
+        </label>
+
+        <select id="foodSelect">
+
+            <option value="">
+                Loading foods...
+            </option>
+
+        </select>
+
+
+        <div
+            id="foodInfo"
+            class="hidden"
+        >
+
+            <h3 style="margin-top:25px;">
+                Your Rating
+            </h3>
+
+
+            <div class="stars">
+
+                <span
+                    class="star"
+                    data-rating="1"
+                    onclick="selectRating(1)"
+                >
+                    ★
+                </span>
+
+                <span
+                    class="star"
+                    data-rating="2"
+                    onclick="selectRating(2)"
+                >
+                    ★
+                </span>
+
+                <span
+                    class="star"
+                    data-rating="3"
+                    onclick="selectRating(3)"
+                >
+                    ★
+                </span>
+
+                <span
+                    class="star"
+                    data-rating="4"
+                    onclick="selectRating(4)"
+                >
+                    ★
+                </span>
+
+                <span
+                    class="star"
+                    data-rating="5"
+                    onclick="selectRating(5)"
+                >
+                    ★
+                </span>
+
+            </div>
+
+
+            <textarea
+                id="comment"
+                placeholder="Write your review..."
+            ></textarea>
+
+
+            <br>
+            <br>
+
+
+            <button
+                id="submitBtn"
+                onclick="submitReview()"
+            >
+
+                Submit Review
+
+            </button>
+
+
+            <div
+                id="message"
+                class="message"
+            ></div>
+
+        </div>
+
+
+        <div
+            id="loginMessage"
+            class="message error"
+        ></div>
+
+    </div>
+
+
+
+    <!-- ======================================
+         RATING SUMMARY
+    ======================================= -->
+
+    <div class="box">
+
+        <div class="rating-summary">
+
+            <h2>
+                Customer Ratings
+            </h2>
+
+
+            <div
+                id="averageRating"
+                class="average-rating"
+            >
+                0.0
+            </div>
+
+
+            <div
+                id="ratingStars"
+                class="rating-stars"
+            >
+                ☆☆☆☆☆
+            </div>
+
+
+            <div
+                id="reviewCount"
+                class="review-count"
+            >
+                0 reviews
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ======================================
+         REVIEWS
+    ======================================= -->
+
+    <div class="box">
+
+        <h2>
+            Customer Reviews
+        </h2>
+
+
+        <div id="reviewsContainer">
+
+            <p>
+                Select a food to view reviews.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+/* ==========================================
+   VARIABLES
+========================================== */
+
+let foods = [];
+
+let selectedFoodId = null;
+
+let selectedRating = 0;
+
+
+/* ==========================================
+   USER
+========================================== */
+
+const user =
+    JSON.parse(
+        localStorage.getItem(
+            "foodhubUser"
+        )
+    );
+
+
+/* ==========================================
+   LOAD FOODS
+========================================== */
+
+async function loadFoods() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/foods"
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to load foods"
+            );
+
+        }
+
+
+        foods =
+            await response.json();
+
+
+        const select =
+            document.getElementById(
+                "foodSelect"
+            );
+
+
+        select.innerHTML = `
+
+            <option value="">
+                Select a food
+            </option>
+
+        `;
+
+
+        foods.forEach(food => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                food.id;
+
+
+            option.textContent =
+                `${food.name} - ₹${Number(food.price).toFixed(2)}`;
+
+
+            select.appendChild(
+                option
+            );
+
+        });
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "foodSelect"
+        ).innerHTML = `
+
+            <option value="">
+                Failed to load foods
+            </option>
+
+        `;
+
+    }
+
+}
+
+
+/* ==========================================
+   FOOD CHANGE
+========================================== */
+
+document.getElementById(
+    "foodSelect"
+).addEventListener(
+    "change",
+    async function () {
+
+        selectedFoodId =
+            Number(this.value);
+
+
+        selectedRating = 0;
+
+
+        resetStars();
+
+
+        document.getElementById(
+            "comment"
+        ).value = "";
+
+
+        if (!selectedFoodId) {
+
+            document.getElementById(
+                "foodInfo"
+            ).classList.add(
+                "hidden"
+            );
+
+
+            document.getElementById(
+                "reviewsContainer"
+            ).innerHTML = `
+
+                <p>
+                    Select a food to view reviews.
+                </p>
+
+            `;
+
+            return;
+
+        }
+
+
+        document.getElementById(
+            "foodInfo"
+        ).classList.remove(
+            "hidden"
+        );
+
+
+        await loadReviews(
+            selectedFoodId
+        );
+
+
+        await checkReviewPermission(
+            selectedFoodId
+        );
+
+    }
+);
+
+
+/* ==========================================
+   SELECT RATING
+========================================== */
+
+function selectRating(rating) {
+
+    selectedRating =
+        rating;
+
+
+    const stars =
+        document.querySelectorAll(
+            ".star"
+        );
+
+
+    stars.forEach(star => {
+
+        const starRating =
+            Number(
+                star.dataset.rating
+            );
+
+
+        if (
+            starRating <= rating
+        ) {
+
+            star.classList.add(
+                "active"
+            );
+
+        } else {
+
+            star.classList.remove(
+                "active"
+            );
+
+        }
+
+    });
+
+}
+
+
+/* ==========================================
+   RESET STARS
+========================================== */
+
+function resetStars() {
+
+    document.querySelectorAll(
+        ".star"
+    ).forEach(star => {
+
+        star.classList.remove(
+            "active"
+        );
+
+    });
+
+}
+
+
+/* ==========================================
+   CHECK REVIEW PERMISSION
+========================================== */
+
+async function checkReviewPermission(
+    foodId
+) {
+
+    const message =
+        document.getElementById(
+            "loginMessage"
+        );
+
+
+    const submitBtn =
+        document.getElementById(
+            "submitBtn"
+        );
+
+
+    message.textContent = "";
+
+
+    if (!user) {
+
+        submitBtn.disabled =
+            true;
+
+
+        message.textContent =
+            "Please login to write a review.";
+
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/reviews/can-review/${user.id}/${foodId}`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            data.canReview
+        ) {
+
+            submitBtn.disabled =
+                false;
+
+
+            message.textContent =
+                "You can review this food.";
+
+
+            message.className =
+                "message success";
+
+        } else {
+
+            submitBtn.disabled =
+                true;
+
+
+            message.textContent =
+                data.message ||
+                "You cannot review this food yet.";
+
+
+            message.className =
+                "message error";
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        submitBtn.disabled =
+            true;
+
+
+        message.textContent =
+            "Unable to check review permission.";
+
+    }
+
+}
+
+
+/* ==========================================
+   LOAD REVIEWS
+========================================== */
+
+async function loadReviews(
+    foodId
+) {
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/reviews/food/${foodId}`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        /* ==============================
+           SUMMARY
+        ============================== */
+
+        const average =
+            Number(
+                data.summary.average_rating || 0
+            );
+
+
+        const total =
+            Number(
+                data.summary.total_reviews || 0
+            );
+
+
+        document.getElementById(
+            "averageRating"
+        ).textContent =
+            average.toFixed(1);
+
+
+        document.getElementById(
+            "ratingStars"
+        ).textContent =
+            createStars(
+                average
+            );
+
+
+        document.getElementById(
+            "reviewCount"
+        ).textContent =
+            `${total} review${total === 1 ? "" : "s"}`;
+
+
+        /* ==============================
+           REVIEWS
+        ============================== */
+
+        const container =
+            document.getElementById(
+                "reviewsContainer"
+            );
+
+
+        if (
+            !data.reviews ||
+            data.reviews.length === 0
+        ) {
+
+            container.innerHTML = `
+
+                <p>
+                    No reviews yet.
+                    Be the first to review this food!
+                </p>
+
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML = "";
+
+
+        data.reviews.forEach(
+            review => {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "review-card";
+
+
+                const customerName =
+                    review.customer_name ||
+                    "Customer";
+
+
+                const rating =
+                    Number(
+                        review.rating
+                    );
+
+
+                const comment =
+                    review.comment ||
+                    "No comment";
+
+
+                const date =
+                    review.created_at
+                        ? new Date(
+                            review.created_at
+                        ).toLocaleString()
+                        : "";
+
+
+                card.innerHTML = `
+
+                    <div class="customer-name">
+
+                        ${escapeHtml(
+                            customerName
+                        )}
+
+                    </div>
+
+
+                    <div class="review-stars">
+
+                        ${createStars(
+                            rating
+                        )}
+
+                    </div>
+
+
+                    <div class="review-comment">
+
+                        ${escapeHtml(
+                            comment
+                        )}
+
+                    </div>
+
+
+                    <div class="review-date">
+
+                        ${date}
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(
+                    card
+                );
+
+            }
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "reviewsContainer"
+        ).innerHTML = `
+
+            <p class="error">
+
+                Failed to load reviews.
+
+            </p>
+
+        `;
+
+    }
+
+}
+
+
+/* ==========================================
+   CREATE STARS
+========================================== */
+
+function createStars(
+    rating
+) {
+
+    let result = "";
+
+
+    for (
+        let i = 1;
+        i <= 5;
+        i++
+    ) {
+
+        if (
+            i <= Math.round(rating)
+        ) {
+
+            result += "★";
+
+        } else {
+
+            result += "☆";
+
+        }
+
+    }
+
+
+    return result;
+
+}
+
+
+/* ==========================================
+   SUBMIT REVIEW
+========================================== */
+
+async function submitReview() {
+
+    const message =
+        document.getElementById(
+            "message"
+        );
+
+
+    message.textContent = "";
+
+
+    if (!user) {
+
+        message.textContent =
+            "Please login first.";
+
+        message.className =
+            "message error";
+
+        return;
+
+    }
+
+
+    if (!selectedFoodId) {
+
+        message.textContent =
+            "Please select a food.";
+
+        message.className =
+            "message error";
+
+        return;
+
+    }
+
+
+    if (
+        selectedRating < 1 ||
+        selectedRating > 5
+    ) {
+
+        message.textContent =
+            "Please select a rating.";
+
+        message.className =
+            "message error";
+
+        return;
+
+    }
+
+
+    const comment =
+        document.getElementById(
+            "comment"
+        ).value.trim();
+
+
+    try {
+
+        /* ==============================
+           GET REVIEW PERMISSION
+        ============================== */
+
+        const permissionResponse =
+            await fetch(
+                `/api/reviews/can-review/${user.id}/${selectedFoodId}`
+            );
+
+
+        const permission =
+            await permissionResponse.json();
+
+
+        if (
+            !permission.canReview
+        ) {
+
+            message.textContent =
+                permission.message ||
+                "You cannot review this food.";
+
+            message.className =
+                "message error";
+
+            return;
+
+        }
+
+
+        /* ==============================
+           SUBMIT
+        ============================== */
+
+        const response =
+            await fetch(
+                "/api/reviews",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            user_id:
+                                Number(
+                                    user.id
+                                ),
+
+                            food_id:
+                                Number(
+                                    selectedFoodId
+                                ),
+
+                            order_id:
+                                Number(
+                                    permission.orderId
+                                ),
+
+                            rating:
+                                Number(
+                                    selectedRating
+                                ),
+
+                            comment:
+                                comment
+
+                        })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            message.textContent =
+                data.message ||
+                "Failed to submit review.";
+
+            message.className =
+                "message error";
+
+            return;
+
+        }
+
+
+        message.textContent =
+            "Review submitted successfully! ⭐";
+
+        message.className =
+            "message success";
+
+
+        document.getElementById(
+            "comment"
+        ).value = "";
+
+
+        selectedRating = 0;
+
+        resetStars();
+
+
+        document.getElementById(
+            "submitBtn"
+        ).disabled =
+            true;
+
+
+        await loadReviews(
+            selectedFoodId
+        );
+
+
+        await checkReviewPermission(
+            selectedFoodId
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        message.textContent =
+            "Server error. Please try again.";
+
+        message.className =
+            "message error";
+
+    }
+
+}
+
+
+/* ==========================================
+   HTML ESCAPE
+========================================== */
+
+function escapeHtml(
+    text
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text;
+
+
+    return div.innerHTML;
+
+}
+
+
+/* ==========================================
+   LOAD PAGE
+========================================== */
+
+loadFoods();
+
+
+</script>
+
+
+</body>
+
+</html>

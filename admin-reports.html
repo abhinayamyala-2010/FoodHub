@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FoodHub - Reports & Analytics</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f6fa;
+            color: #222;
+        }
+
+        header {
+            background: #222;
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            color: #ff9800;
+        }
+
+        header a {
+            text-decoration: none;
+            color: white;
+            background: #ff9800;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .title {
+            margin-bottom: 25px;
+        }
+
+        .title h2 {
+            margin-bottom: 6px;
+        }
+
+        .title p {
+            color: #666;
+        }
+
+        /* SUMMARY */
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff9800;
+        }
+
+        /* FILTER */
+
+        .filter-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .filter-box h3 {
+            margin-bottom: 15px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        input,
+        select {
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            border: none;
+            padding: 11px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .refresh {
+            background: #2196f3;
+            color: white;
+        }
+
+        .print {
+            background: #4caf50;
+            color: white;
+        }
+
+        /* REPORT */
+
+        .report-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        .report-box h2 {
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #f8f8f8;
+        }
+
+        .amount {
+            font-weight: bold;
+            color: #159447;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .confirmed {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .preparing {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .ready {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .served {
+            background: #e2e3e5;
+            color: #41464b;
+        }
+
+        .completed {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .cancelled {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 35px;
+            color: #777;
+        }
+
+        /* PAYMENT */
+
+        .paid {
+            color: #159447;
+            font-weight: bold;
+        }
+
+        .unpaid {
+            color: #e53935;
+            font-weight: bold;
+        }
+
+        /* PRINT */
+
+        @media print {
+
+            header,
+            .filter-box,
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+            }
+
+            .container {
+                max-width: 100%;
+                margin: 0;
+            }
+
+            .card,
+            .report-box {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+
+        }
+
+        @media (max-width: 1000px) {
+
+            .summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            header {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+
+<style id="foodhub-cafe-theme">
+:root{--cafe-espresso:#3b2418;--cafe-coffee:#5a3825;--cafe-caramel:#b9783f;--cafe-gold:#d6a15d;--cafe-cream:#fff8ed;--cafe-beige:#f3e5d0;--cafe-latte:#ead4b7;--cafe-text:#2f211a;--cafe-white:#fffdf9;--cafe-shadow:0 8px 24px rgba(59,36,24,.12)}
+html,body{background:var(--cafe-cream)!important;color:var(--cafe-text)!important}
+body{font-family:Georgia,'Times New Roman',serif!important}
+header,.header,.navbar,nav,.nav,.topbar,.sidebar{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+header a,.header a,.navbar a,nav a,.nav a,.topbar a,.sidebar a{color:#fff8ed!important}
+h1,h2,h3,h4,h5,h6{color:var(--cafe-espresso)!important}
+button,.btn,.button,input[type=submit],input[type=button]{background:var(--cafe-coffee)!important;color:#fff8ed!important;border-color:var(--cafe-coffee)!important;border-radius:10px!important;box-shadow:0 3px 8px rgba(59,36,24,.16)!important}
+button:hover,.btn:hover,.button:hover,input[type=submit]:hover,input[type=button]:hover{background:var(--cafe-caramel)!important;border-color:var(--cafe-caramel)!important}
+a{color:var(--cafe-coffee)}
+a:hover{color:var(--cafe-caramel)}
+.card,.food-card,.menu-card,.product-card,.order-card,.stat-card,.box,.panel,.container-card,.admin-card,.reservation-card,.review-card,.table-card,.modal-content{background:var(--cafe-white)!important;border-color:var(--cafe-latte)!important;box-shadow:var(--cafe-shadow)!important;border-radius:14px!important}
+input,select,textarea{background:#fffdf9!important;color:var(--cafe-text)!important;border:1px solid #d8b994!important;border-radius:8px!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--cafe-caramel)!important;box-shadow:0 0 0 3px rgba(185,120,63,.15)!important}
+th{background:var(--cafe-coffee)!important;color:#fff8ed!important}
+tr:nth-child(even){background:#fbf1e2!important}
+.badge,.status,.tag,.category{background:var(--cafe-beige)!important;color:var(--cafe-espresso)!important}
+.logo,.brand{color:var(--cafe-gold)!important}
+footer{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+img{border-radius:10px}
+hr{border-color:var(--cafe-latte)!important}
+.cafe-theme-badge{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--cafe-beige);color:var(--cafe-espresso);font-size:13px;font-weight:700;letter-spacing:.4px}
+</style>
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>🍽️ FoodHub Admin</h1>
+
+    <a href="admin-dashboard.html">
+        ← Dashboard
+    </a>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- TITLE -->
+
+    <div class="title">
+
+        <h2>📊 Sales Reports & Analytics</h2>
+
+        <p>
+            View FoodHub orders, revenue and sales performance.
+        </p>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    <div class="summary">
+
+
+        <div class="card">
+
+            <h3>Total Orders</h3>
+
+            <div
+                class="number"
+                id="totalOrders"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Completed Orders</h3>
+
+            <div
+                class="number"
+                id="completedOrders"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Pending Orders</h3>
+
+            <div
+                class="number"
+                id="pendingOrders"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Total Revenue</h3>
+
+            <div
+                class="number"
+                id="totalRevenue"
+            >
+                ₹0.00
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Today's Revenue</h3>
+
+            <div
+                class="number"
+                id="todayRevenue"
+            >
+                ₹0.00
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Average Order Value</h3>
+
+            <div
+                class="number"
+                id="averageOrderValue"
+            >
+                ₹0.00
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Paid Orders</h3>
+
+            <div
+                class="number"
+                id="paidOrders"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Pending Payments</h3>
+
+            <div
+                class="number"
+                id="pendingPayments"
+            >
+                0
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FILTER -->
+
+    <div class="filter-box">
+
+        <h3>🔍 Report Filters</h3>
+
+        <div class="filters">
+
+            <input
+                type="date"
+                id="fromDate"
+            >
+
+            <input
+                type="date"
+                id="toDate"
+            >
+
+            <select id="statusFilter">
+
+                <option value="">
+                    All Order Status
+                </option>
+
+                <option value="Pending">
+                    Pending
+                </option>
+
+                <option value="Confirmed">
+                    Confirmed
+                </option>
+
+                <option value="Preparing">
+                    Preparing
+                </option>
+
+                <option value="Ready">
+                    Ready
+                </option>
+
+                <option value="Served">
+                    Served
+                </option>
+
+                <option value="Completed">
+                    Completed
+                </option>
+
+                <option value="Cancelled">
+                    Cancelled
+                </option>
+
+            </select>
+
+
+            <button
+                class="refresh"
+                onclick="filterOrders()"
+            >
+                🔍 Apply Filter
+            </button>
+
+
+            <button
+                class="refresh"
+                onclick="clearFilters()"
+            >
+                Clear
+            </button>
+
+
+            <button
+                class="print"
+                onclick="window.print()"
+            >
+                🖨️ Print Report
+            </button>
+
+
+            <button
+                class="refresh"
+                onclick="loadReports()"
+            >
+                🔄 Refresh
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ORDER REPORT -->
+
+    <div class="report-box">
+
+        <h2>🧾 Order Sales Report</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Order Type</th>
+                    <th>Subtotal</th>
+                    <th>Discount</th>
+                    <th>GST</th>
+                    <th>Delivery</th>
+                    <th>Total</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th>Date</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="reportTable">
+
+                <tr>
+
+                    <td
+                        colspan="11"
+                        class="no-data"
+                    >
+                        Loading report...
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+    // ==========================================
+    // DATA
+    // ==========================================
+
+    let orders = [];
+
+    let filteredOrders = [];
+
+
+    // ==========================================
+    // LOAD REPORTS
+    // ==========================================
+
+    async function loadReports() {
+
+        try {
+
+
+            // -----------------------------
+            // REPORT SUMMARY
+            // -----------------------------
+
+            const reportResponse =
+                await fetch(
+                    "http://localhost:5000/api/reports"
+                );
+
+
+            if (reportResponse.ok) {
+
+                const data =
+                    await reportResponse.json();
+
+
+                document.getElementById(
+                    "totalOrders"
+                ).textContent =
+                    data.totalOrders || 0;
+
+
+                document.getElementById(
+                    "completedOrders"
+                ).textContent =
+                    data.completedOrders || 0;
+
+
+                document.getElementById(
+                    "pendingOrders"
+                ).textContent =
+                    data.pendingOrders || 0;
+
+
+                document.getElementById(
+                    "totalRevenue"
+                ).textContent =
+                    "₹" +
+                    Number(
+                        data.totalRevenue || 0
+                    ).toFixed(2);
+
+
+                document.getElementById(
+                    "todayRevenue"
+                ).textContent =
+                    "₹" +
+                    Number(
+                        data.todayRevenue || 0
+                    ).toFixed(2);
+
+
+                document.getElementById(
+                    "averageOrderValue"
+                ).textContent =
+                    "₹" +
+                    Number(
+                        data.averageOrderValue || 0
+                    ).toFixed(2);
+
+            }
+
+
+            // -----------------------------
+            // ALL ORDERS
+            // -----------------------------
+
+            const orderResponse =
+                await fetch(
+                    "http://localhost:5000/api/admin/orders"
+                );
+
+
+            if (!orderResponse.ok) {
+
+                throw new Error(
+                    "Unable to load orders"
+                );
+
+            }
+
+
+            const data =
+                await orderResponse.json();
+
+
+            orders =
+                Array.isArray(data)
+                    ? data
+                    : data.orders || [];
+
+
+            updatePaymentSummary();
+
+            filteredOrders =
+                [...orders];
+
+            displayOrders();
+
+
+        }
+        catch (error) {
+
+            console.error(error);
+
+
+            document.getElementById(
+                "reportTable"
+            ).innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="11"
+                        class="no-data"
+                    >
+                        ❌ Unable to load sales report.
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+    }
+
+
+    // ==========================================
+    // PAYMENT SUMMARY
+    // ==========================================
+
+    function updatePaymentSummary() {
+
+        let paid = 0;
+
+        let pending = 0;
+
+
+        orders.forEach(order => {
+
+            const status =
+                String(
+                    order.payment_status || ""
+                ).toLowerCase();
+
+
+            if (status === "paid") {
+
+                paid++;
+
+            }
+            else if (status === "pending") {
+
+                pending++;
+
+            }
+
+        });
+
+
+        document.getElementById(
+            "paidOrders"
+        ).textContent = paid;
+
+
+        document.getElementById(
+            "pendingPayments"
+        ).textContent = pending;
+
+    }
+
+
+    // ==========================================
+    // FILTER ORDERS
+    // ==========================================
+
+    function filterOrders() {
+
+        const fromDate =
+            document.getElementById(
+                "fromDate"
+            ).value;
+
+
+        const toDate =
+            document.getElementById(
+                "toDate"
+            ).value;
+
+
+        const status =
+            document.getElementById(
+                "statusFilter"
+            ).value;
+
+
+        filteredOrders =
+            orders.filter(order => {
+
+
+                // -----------------------------
+                // STATUS
+                // -----------------------------
+
+                if (
+                    status &&
+                    order.status !== status
+                ) {
+
+                    return false;
+
+                }
+
+
+                // -----------------------------
+                // DATE
+                // -----------------------------
+
+                if (
+                    fromDate ||
+                    toDate
+                ) {
+
+                    const orderDate =
+                        String(
+                            order.order_date || ""
+                        ).substring(0, 10);
+
+
+                    if (
+                        fromDate &&
+                        orderDate < fromDate
+                    ) {
+
+                        return false;
+
+                    }
+
+
+                    if (
+                        toDate &&
+                        orderDate > toDate
+                    ) {
+
+                        return false;
+
+                    }
+
+                }
+
+
+                return true;
+
+            });
+
+
+        displayOrders();
+
+    }
+
+
+    // ==========================================
+    // CLEAR FILTER
+    // ==========================================
+
+    function clearFilters() {
+
+        document.getElementById(
+            "fromDate"
+        ).value = "";
+
+
+        document.getElementById(
+            "toDate"
+        ).value = "";
+
+
+        document.getElementById(
+            "statusFilter"
+        ).value = "";
+
+
+        filteredOrders =
+            [...orders];
+
+
+        displayOrders();
+
+    }
+
+
+    // ==========================================
+    // DISPLAY ORDERS
+    // ==========================================
+
+    function displayOrders() {
+
+        const table =
+            document.getElementById(
+                "reportTable"
+            );
+
+
+        if (
+            !filteredOrders ||
+            filteredOrders.length === 0
+        ) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="11"
+                        class="no-data"
+                    >
+                        No orders found.
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        table.innerHTML =
+            filteredOrders.map(order => {
+
+
+                const status =
+                    String(
+                        order.status ||
+                        "Pending"
+                    );
+
+
+                const statusClass =
+                    status
+                        .toLowerCase();
+
+
+                const paymentStatus =
+                    String(
+                        order.payment_status ||
+                        "Pending"
+                    );
+
+
+                const paymentClass =
+                    paymentStatus
+                        .toLowerCase() === "paid"
+                        ? "paid"
+                        : "unpaid";
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+                            #${order.id}
+                        </td>
+
+
+                        <td>
+                            ${escapeHtml(
+                                order.customer_name ||
+                                "Customer"
+                            )}
+                        </td>
+
+
+                        <td>
+                            ${escapeHtml(
+                                order.order_type ||
+                                "Delivery"
+                            )}
+                        </td>
+
+
+                        <td>
+                            ₹${Number(
+                                order.subtotal || 0
+                            ).toFixed(2)}
+                        </td>
+
+
+                        <td>
+                            ₹${Number(
+                                order.discount || 0
+                            ).toFixed(2)}
+                        </td>
+
+
+                        <td>
+                            ₹${Number(
+                                order.gst || 0
+                            ).toFixed(2)}
+                        </td>
+
+
+                        <td>
+                            ₹${Number(
+                                order.delivery_charge || 0
+                            ).toFixed(2)}
+                        </td>
+
+
+                        <td class="amount">
+                            ₹${Number(
+                                order.total || 0
+                            ).toFixed(2)}
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="${paymentClass}"
+                            >
+                                ${escapeHtml(
+                                    paymentStatus
+                                )}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="status ${statusClass}"
+                            >
+                                ${escapeHtml(
+                                    status
+                                )}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            ${escapeHtml(
+                                order.order_date ||
+                                ""
+                            )}
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }).join("");
+
+    }
+
+
+    // ==========================================
+    // HTML ESCAPE
+    // ==========================================
+
+    function escapeHtml(value) {
+
+        return String(value)
+
+            .replaceAll(
+                "&",
+                "&amp;"
+            )
+
+            .replaceAll(
+                "<",
+                "&lt;"
+            )
+
+            .replaceAll(
+                ">",
+                "&gt;"
+            )
+
+            .replaceAll(
+                '"',
+                "&quot;"
+            )
+
+            .replaceAll(
+                "'",
+                "&#039;"
+            );
+
+    }
+
+
+    // ==========================================
+    // INITIAL LOAD
+    // ==========================================
+
+    loadReports();
+
+
+    // ==========================================
+    // AUTO REFRESH
+    // ==========================================
+
+    setInterval(
+        loadReports,
+        30000
+    );
+
+
+</script>
+
+</body>
+
+</html>

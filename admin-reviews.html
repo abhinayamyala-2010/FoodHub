@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FoodHub - Reviews & Ratings</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f6fa;
+            color: #222;
+        }
+
+        header {
+            background: #222;
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            color: #ff9800;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            background: #ff9800;
+            padding: 10px 16px;
+            border-radius: 6px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .title {
+            margin-bottom: 20px;
+        }
+
+        .title h2 {
+            margin-bottom: 5px;
+        }
+
+        .title p {
+            color: #666;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .card .number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff9800;
+        }
+
+        .toolbar {
+            background: white;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        input,
+        select {
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        input {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        button {
+            border: none;
+            padding: 11px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .refresh {
+            background: #2196f3;
+            color: white;
+        }
+
+        .reviews {
+            display: grid;
+            gap: 15px;
+        }
+
+        .review {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .review-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .food-name {
+            font-size: 19px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .customer {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .stars {
+            color: #ff9800;
+            font-size: 22px;
+            white-space: nowrap;
+        }
+
+        .review-text {
+            background: #f8f8f8;
+            padding: 14px;
+            border-radius: 7px;
+            margin: 12px 0;
+            line-height: 1.5;
+        }
+
+        .review-date {
+            color: #888;
+            font-size: 13px;
+        }
+
+        .delete-btn {
+            background: #e53935;
+            color: white;
+            margin-top: 12px;
+        }
+
+        .no-reviews {
+            background: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 10px;
+            color: #777;
+        }
+
+        @media (max-width: 800px) {
+            .summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .review-top {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+
+<style id="foodhub-cafe-theme">
+:root{--cafe-espresso:#3b2418;--cafe-coffee:#5a3825;--cafe-caramel:#b9783f;--cafe-gold:#d6a15d;--cafe-cream:#fff8ed;--cafe-beige:#f3e5d0;--cafe-latte:#ead4b7;--cafe-text:#2f211a;--cafe-white:#fffdf9;--cafe-shadow:0 8px 24px rgba(59,36,24,.12)}
+html,body{background:var(--cafe-cream)!important;color:var(--cafe-text)!important}
+body{font-family:Georgia,'Times New Roman',serif!important}
+header,.header,.navbar,nav,.nav,.topbar,.sidebar{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+header a,.header a,.navbar a,nav a,.nav a,.topbar a,.sidebar a{color:#fff8ed!important}
+h1,h2,h3,h4,h5,h6{color:var(--cafe-espresso)!important}
+button,.btn,.button,input[type=submit],input[type=button]{background:var(--cafe-coffee)!important;color:#fff8ed!important;border-color:var(--cafe-coffee)!important;border-radius:10px!important;box-shadow:0 3px 8px rgba(59,36,24,.16)!important}
+button:hover,.btn:hover,.button:hover,input[type=submit]:hover,input[type=button]:hover{background:var(--cafe-caramel)!important;border-color:var(--cafe-caramel)!important}
+a{color:var(--cafe-coffee)}
+a:hover{color:var(--cafe-caramel)}
+.card,.food-card,.menu-card,.product-card,.order-card,.stat-card,.box,.panel,.container-card,.admin-card,.reservation-card,.review-card,.table-card,.modal-content{background:var(--cafe-white)!important;border-color:var(--cafe-latte)!important;box-shadow:var(--cafe-shadow)!important;border-radius:14px!important}
+input,select,textarea{background:#fffdf9!important;color:var(--cafe-text)!important;border:1px solid #d8b994!important;border-radius:8px!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--cafe-caramel)!important;box-shadow:0 0 0 3px rgba(185,120,63,.15)!important}
+th{background:var(--cafe-coffee)!important;color:#fff8ed!important}
+tr:nth-child(even){background:#fbf1e2!important}
+.badge,.status,.tag,.category{background:var(--cafe-beige)!important;color:var(--cafe-espresso)!important}
+.logo,.brand{color:var(--cafe-gold)!important}
+footer{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+img{border-radius:10px}
+hr{border-color:var(--cafe-latte)!important}
+.cafe-theme-badge{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--cafe-beige);color:var(--cafe-espresso);font-size:13px;font-weight:700;letter-spacing:.4px}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>FoodHub Admin</h1>
+    <a href="admin-dashboard.html">← Dashboard</a>
+</header>
+
+<div class="container">
+
+    <div class="title">
+        <h2>Reviews & Ratings Management</h2>
+        <p>View and manage customer feedback about food items.</p>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="summary">
+
+        <div class="card">
+            <h3>Total Reviews</h3>
+            <div class="number" id="totalReviews">0</div>
+        </div>
+
+        <div class="card">
+            <h3>Average Rating</h3>
+            <div class="number" id="averageRating">0.0 ⭐</div>
+        </div>
+
+        <div class="card">
+            <h3>5 Star Reviews</h3>
+            <div class="number" id="fiveStar">0</div>
+        </div>
+
+        <div class="card">
+            <h3>1 Star Reviews</h3>
+            <div class="number" id="oneStar">0</div>
+        </div>
+
+    </div>
+
+    <!-- SEARCH / FILTER -->
+    <div class="toolbar">
+
+        <input
+            type="text"
+            id="search"
+            placeholder="Search food, customer or review..."
+            oninput="displayReviews()"
+        >
+
+        <select id="ratingFilter" onchange="displayReviews()">
+            <option value="">All Ratings</option>
+            <option value="5">5 Stars</option>
+            <option value="4">4 Stars</option>
+            <option value="3">3 Stars</option>
+            <option value="2">2 Stars</option>
+            <option value="1">1 Star</option>
+        </select>
+
+        <button class="refresh" onclick="loadReviews()">
+            🔄 Refresh
+        </button>
+
+    </div>
+
+    <!-- REVIEWS -->
+    <div id="reviewsContainer" class="reviews">
+        <div class="no-reviews">
+            Loading reviews...
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    let reviews = [];
+
+    // ==========================================
+    // LOAD REVIEWS
+    // ==========================================
+
+    async function loadReviews() {
+
+        try {
+
+            const response = await fetch(
+                "http://localhost:5000/api/reviews"
+            );
+
+            if (!response.ok) {
+                throw new Error("Unable to load reviews");
+            }
+
+            const data = await response.json();
+
+            /*
+                Different backend versions may return:
+                [
+                    {...}
+                ]
+
+                OR
+
+                {
+                    reviews: [...]
+                }
+            */
+
+            if (Array.isArray(data)) {
+                reviews = data;
+            } else {
+                reviews = data.reviews || [];
+            }
+
+            updateSummary();
+
+            displayReviews();
+
+        } catch (error) {
+
+            console.error(error);
+
+            document.getElementById("reviewsContainer").innerHTML = `
+                <div class="no-reviews">
+                    ❌ Unable to load reviews.<br><br>
+                    Make sure the FoodHub server is running.
+                </div>
+            `;
+        }
+    }
+
+
+    // ==========================================
+    // SUMMARY
+    // ==========================================
+
+    function updateSummary() {
+
+        const total = reviews.length;
+
+        document.getElementById("totalReviews").textContent = total;
+
+        if (total === 0) {
+
+            document.getElementById("averageRating").textContent = "0.0 ⭐";
+            document.getElementById("fiveStar").textContent = "0";
+            document.getElementById("oneStar").textContent = "0";
+
+            return;
+        }
+
+        let totalRating = 0;
+        let fiveStar = 0;
+        let oneStar = 0;
+
+        reviews.forEach(review => {
+
+            const rating = Number(
+                review.rating ||
+                review.stars ||
+                0
+            );
+
+            totalRating += rating;
+
+            if (rating === 5) {
+                fiveStar++;
+            }
+
+            if (rating === 1) {
+                oneStar++;
+            }
+
+        });
+
+        const average = totalRating / total;
+
+        document.getElementById("averageRating").textContent =
+            average.toFixed(1) + " ⭐";
+
+        document.getElementById("fiveStar").textContent = fiveStar;
+
+        document.getElementById("oneStar").textContent = oneStar;
+    }
+
+
+    // ==========================================
+    // DISPLAY REVIEWS
+    // ==========================================
+
+    function displayReviews() {
+
+        const container =
+            document.getElementById("reviewsContainer");
+
+        const search =
+            document.getElementById("search")
+                .value
+                .toLowerCase()
+                .trim();
+
+        const ratingFilter =
+            document.getElementById("ratingFilter").value;
+
+
+        const filtered = reviews.filter(review => {
+
+            const food =
+                String(
+                    review.food_name ||
+                    review.foodName ||
+                    review.name ||
+                    ""
+                ).toLowerCase();
+
+            const customer =
+                String(
+                    review.customer_name ||
+                    review.user_name ||
+                    review.username ||
+                    ""
+                ).toLowerCase();
+
+            const comment =
+                String(
+                    review.comment ||
+                    review.review ||
+                    review.message ||
+                    ""
+                ).toLowerCase();
+
+            const rating =
+                Number(
+                    review.rating ||
+                    review.stars ||
+                    0
+                );
+
+
+            const matchesSearch =
+                !search ||
+                food.includes(search) ||
+                customer.includes(search) ||
+                comment.includes(search);
+
+            const matchesRating =
+                !ratingFilter ||
+                rating === Number(ratingFilter);
+
+            return matchesSearch && matchesRating;
+        });
+
+
+        if (filtered.length === 0) {
+
+            container.innerHTML = `
+                <div class="no-reviews">
+                    ⭐ No reviews found.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        container.innerHTML = filtered.map(review => {
+
+            const rating =
+                Number(
+                    review.rating ||
+                    review.stars ||
+                    0
+                );
+
+            const foodName =
+                review.food_name ||
+                review.foodName ||
+                review.name ||
+                "Unknown Food";
+
+            const customerName =
+                review.customer_name ||
+                review.user_name ||
+                review.username ||
+                "Customer";
+
+            const comment =
+                review.comment ||
+                review.review ||
+                review.message ||
+                "No comment";
+
+            const date =
+                review.created_at ||
+                review.review_date ||
+                review.date ||
+                "";
+
+
+            let stars = "";
+
+            for (let i = 1; i <= 5; i++) {
+
+                if (i <= rating) {
+                    stars += "★";
+                } else {
+                    stars += "☆";
+                }
+
+            }
+
+
+            return `
+
+                <div class="review">
+
+                    <div class="review-top">
+
+                        <div>
+
+                            <div class="food-name">
+                                🍽️ ${escapeHtml(foodName)}
+                            </div>
+
+                            <div class="customer">
+                                👤 ${escapeHtml(customerName)}
+                            </div>
+
+                        </div>
+
+                        <div class="stars">
+                            ${stars}
+                            <span style="font-size:14px;color:#555;">
+                                (${rating}/5)
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="review-text">
+                        ${escapeHtml(comment)}
+                    </div>
+
+
+                    <div class="review-date">
+                        📅 ${escapeHtml(String(date))}
+                    </div>
+
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteReview(${review.id})"
+                    >
+                        🗑 Delete Review
+                    </button>
+
+                </div>
+
+            `;
+
+        }).join("");
+    }
+
+
+    // ==========================================
+    // DELETE REVIEW
+    // ==========================================
+
+    async function deleteReview(id) {
+
+        if (!confirm(
+            "Are you sure you want to delete this review?"
+        )) {
+            return;
+        }
+
+
+        try {
+
+            const response = await fetch(
+                `http://localhost:5000/api/reviews/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+            if (!response.ok) {
+
+                const text = await response.text();
+
+                console.error(text);
+
+                alert(
+                    "Delete API is not available in the backend yet."
+                );
+
+                return;
+            }
+
+
+            alert("Review deleted successfully.");
+
+            loadReviews();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Unable to delete review."
+            );
+        }
+    }
+
+
+    // ==========================================
+    // HTML ESCAPE
+    // ==========================================
+
+    function escapeHtml(value) {
+
+        return String(value)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+
+    // ==========================================
+    // INITIAL LOAD
+    // ==========================================
+
+    loadReviews();
+
+
+    // AUTO REFRESH
+    setInterval(loadReviews, 30000);
+
+</script>
+
+</body>
+</html>

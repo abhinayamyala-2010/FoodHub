@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FoodHub - Customer Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f6fa;
+            color: #222;
+        }
+
+        header {
+            background: #222;
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            color: #ff9800;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            background: #ff9800;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .title {
+            margin-bottom: 25px;
+        }
+
+        .title h2 {
+            margin-bottom: 6px;
+        }
+
+        .title p {
+            color: #666;
+        }
+
+        /* SUMMARY */
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .summary-card h3 {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff9800;
+        }
+
+        /* TOOLBAR */
+
+        .toolbar {
+            background: white;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar input {
+            flex: 1;
+            min-width: 250px;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            border: none;
+            padding: 11px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .refresh {
+            background: #2196f3;
+            color: white;
+        }
+
+        /* TABLE */
+
+        .table-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        th {
+            background: #f8f8f8;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        .customer-name {
+            font-weight: bold;
+        }
+
+        .email {
+            color: #666;
+        }
+
+        .amount {
+            font-weight: bold;
+            color: #159447;
+        }
+
+        .view-btn {
+            background: #673ab7;
+            color: white;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 35px;
+            color: #777;
+        }
+
+        /* CUSTOMER MODAL */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .modal-box h2 {
+            margin-bottom: 20px;
+        }
+
+        .detail {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail strong {
+            display: inline-block;
+            width: 140px;
+        }
+
+        .close-btn {
+            margin-top: 20px;
+            background: #e53935;
+            color: white;
+        }
+
+        @media (max-width: 800px) {
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    </style>
+
+<style id="foodhub-cafe-theme">
+:root{--cafe-espresso:#3b2418;--cafe-coffee:#5a3825;--cafe-caramel:#b9783f;--cafe-gold:#d6a15d;--cafe-cream:#fff8ed;--cafe-beige:#f3e5d0;--cafe-latte:#ead4b7;--cafe-text:#2f211a;--cafe-white:#fffdf9;--cafe-shadow:0 8px 24px rgba(59,36,24,.12)}
+html,body{background:var(--cafe-cream)!important;color:var(--cafe-text)!important}
+body{font-family:Georgia,'Times New Roman',serif!important}
+header,.header,.navbar,nav,.nav,.topbar,.sidebar{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+header a,.header a,.navbar a,nav a,.nav a,.topbar a,.sidebar a{color:#fff8ed!important}
+h1,h2,h3,h4,h5,h6{color:var(--cafe-espresso)!important}
+button,.btn,.button,input[type=submit],input[type=button]{background:var(--cafe-coffee)!important;color:#fff8ed!important;border-color:var(--cafe-coffee)!important;border-radius:10px!important;box-shadow:0 3px 8px rgba(59,36,24,.16)!important}
+button:hover,.btn:hover,.button:hover,input[type=submit]:hover,input[type=button]:hover{background:var(--cafe-caramel)!important;border-color:var(--cafe-caramel)!important}
+a{color:var(--cafe-coffee)}
+a:hover{color:var(--cafe-caramel)}
+.card,.food-card,.menu-card,.product-card,.order-card,.stat-card,.box,.panel,.container-card,.admin-card,.reservation-card,.review-card,.table-card,.modal-content{background:var(--cafe-white)!important;border-color:var(--cafe-latte)!important;box-shadow:var(--cafe-shadow)!important;border-radius:14px!important}
+input,select,textarea{background:#fffdf9!important;color:var(--cafe-text)!important;border:1px solid #d8b994!important;border-radius:8px!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--cafe-caramel)!important;box-shadow:0 0 0 3px rgba(185,120,63,.15)!important}
+th{background:var(--cafe-coffee)!important;color:#fff8ed!important}
+tr:nth-child(even){background:#fbf1e2!important}
+.badge,.status,.tag,.category{background:var(--cafe-beige)!important;color:var(--cafe-espresso)!important}
+.logo,.brand{color:var(--cafe-gold)!important}
+footer{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+img{border-radius:10px}
+hr{border-color:var(--cafe-latte)!important}
+.cafe-theme-badge{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--cafe-beige);color:var(--cafe-espresso);font-size:13px;font-weight:700;letter-spacing:.4px}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <h1>🍽️ FoodHub Admin</h1>
+
+    <a href="admin-dashboard.html">
+        ← Dashboard
+    </a>
+
+</header>
+
+
+<div class="container">
+
+    <div class="title">
+
+        <h2>👥 Customer Management</h2>
+
+        <p>
+            View registered customers and their order activity.
+        </p>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    <div class="summary">
+
+        <div class="summary-card">
+
+            <h3>Total Customers</h3>
+
+            <div
+                class="number"
+                id="totalCustomers"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <h3>Total Orders</h3>
+
+            <div
+                class="number"
+                id="totalOrders"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <h3>Total Customer Spending</h3>
+
+            <div
+                class="number"
+                id="totalSpent"
+            >
+                ₹0.00
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="toolbar">
+
+        <input
+            type="text"
+            id="search"
+            placeholder="Search by customer name or email..."
+            oninput="displayCustomers()"
+        >
+
+        <button
+            class="refresh"
+            onclick="loadCustomers()"
+        >
+            🔄 Refresh
+        </button>
+
+    </div>
+
+
+    <!-- CUSTOMER TABLE -->
+
+    <div class="table-box">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Email</th>
+                    <th>Total Orders</th>
+                    <th>Total Spent</th>
+                    <th>Last Order</th>
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="customerTable">
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="no-data"
+                    >
+                        Loading customers...
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- CUSTOMER DETAILS MODAL -->
+
+<div
+    class="modal"
+    id="customerModal"
+>
+
+    <div class="modal-box">
+
+        <h2>👤 Customer Details</h2>
+
+        <div
+            id="customerDetails"
+        ></div>
+
+        <button
+            class="close-btn"
+            onclick="closeModal()"
+        >
+            Close
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    let customers = [];
+
+
+    // ==========================================
+    // LOAD CUSTOMERS
+    // ==========================================
+
+    async function loadCustomers() {
+
+        try {
+
+            const response = await fetch(
+                "http://localhost:5000/api/customers"
+            );
+
+            if (!response.ok) {
+                throw new Error("Customers API error");
+            }
+
+            const data = await response.json();
+
+            customers = Array.isArray(data)
+                ? data
+                : data.customers || [];
+
+            updateSummary();
+
+            displayCustomers();
+
+        } catch (error) {
+
+            console.error(error);
+
+            document.getElementById(
+                "customerTable"
+            ).innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="no-data"
+                    >
+                        ❌ Unable to load customers.
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+    }
+
+
+    // ==========================================
+    // SUMMARY
+    // ==========================================
+
+    function updateSummary() {
+
+        const totalCustomers =
+            customers.length;
+
+        let totalOrders = 0;
+        let totalSpent = 0;
+
+
+        customers.forEach(customer => {
+
+            totalOrders += Number(
+                customer.total_orders || 0
+            );
+
+            totalSpent += Number(
+                customer.total_spent || 0
+            );
+
+        });
+
+
+        document.getElementById(
+            "totalCustomers"
+        ).textContent =
+            totalCustomers;
+
+
+        document.getElementById(
+            "totalOrders"
+        ).textContent =
+            totalOrders;
+
+
+        document.getElementById(
+            "totalSpent"
+        ).textContent =
+            "₹" + totalSpent.toFixed(2);
+
+    }
+
+
+    // ==========================================
+    // DISPLAY CUSTOMERS
+    // ==========================================
+
+    function displayCustomers() {
+
+        const search =
+            document.getElementById("search")
+                .value
+                .toLowerCase()
+                .trim();
+
+
+        const filtered =
+            customers.filter(customer => {
+
+                const name =
+                    String(
+                        customer.name || ""
+                    ).toLowerCase();
+
+                const email =
+                    String(
+                        customer.email || ""
+                    ).toLowerCase();
+
+
+                return (
+                    name.includes(search) ||
+                    email.includes(search)
+                );
+
+            });
+
+
+        const table =
+            document.getElementById(
+                "customerTable"
+            );
+
+
+        if (filtered.length === 0) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="no-data"
+                    >
+                        No customers found.
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        table.innerHTML =
+            filtered.map(customer => {
+
+                return `
+
+                    <tr>
+
+                        <td>
+                            #${customer.id}
+                        </td>
+
+                        <td class="customer-name">
+                            👤 ${escapeHtml(
+                                customer.name ||
+                                "Customer"
+                            )}
+                        </td>
+
+                        <td class="email">
+                            ${escapeHtml(
+                                customer.email ||
+                                "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${customer.total_orders || 0}
+                        </td>
+
+                        <td class="amount">
+                            ₹${Number(
+                                customer.total_spent || 0
+                            ).toFixed(2)}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                customer.last_order_date ||
+                                "No orders"
+                            )}
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="view-btn"
+                                onclick="viewCustomer(${customer.id})"
+                            >
+                                👁️ View
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }).join("");
+
+    }
+
+
+    // ==========================================
+    // VIEW CUSTOMER
+    // ==========================================
+
+    function viewCustomer(id) {
+
+        const customer =
+            customers.find(
+                item => Number(item.id) === Number(id)
+            );
+
+
+        if (!customer) {
+            return;
+        }
+
+
+        document.getElementById(
+            "customerDetails"
+        ).innerHTML = `
+
+            <div class="detail">
+                <strong>Customer ID:</strong>
+                #${customer.id}
+            </div>
+
+            <div class="detail">
+                <strong>Name:</strong>
+                ${escapeHtml(
+                    customer.name || "-"
+                )}
+            </div>
+
+            <div class="detail">
+                <strong>Email:</strong>
+                ${escapeHtml(
+                    customer.email || "-"
+                )}
+            </div>
+
+            <div class="detail">
+                <strong>Role:</strong>
+                ${escapeHtml(
+                    customer.role || "customer"
+                )}
+            </div>
+
+            <div class="detail">
+                <strong>Total Orders:</strong>
+                ${customer.total_orders || 0}
+            </div>
+
+            <div class="detail">
+                <strong>Total Spent:</strong>
+                ₹${Number(
+                    customer.total_spent || 0
+                ).toFixed(2)}
+            </div>
+
+            <div class="detail">
+                <strong>Last Order:</strong>
+                ${escapeHtml(
+                    customer.last_order_date ||
+                    "No orders"
+                )}
+            </div>
+
+        `;
+
+
+        document.getElementById(
+            "customerModal"
+        ).style.display = "flex";
+
+    }
+
+
+    // ==========================================
+    // CLOSE MODAL
+    // ==========================================
+
+    function closeModal() {
+
+        document.getElementById(
+            "customerModal"
+        ).style.display = "none";
+
+    }
+
+
+    // ==========================================
+    // HTML ESCAPE
+    // ==========================================
+
+    function escapeHtml(value) {
+
+        return String(value)
+
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+
+    }
+
+
+    // ==========================================
+    // INITIAL LOAD
+    // ==========================================
+
+    loadCustomers();
+
+
+    // ==========================================
+    // AUTO REFRESH
+    // ==========================================
+
+    setInterval(
+        loadCustomers,
+        30000
+    );
+
+</script>
+
+</body>
+</html>

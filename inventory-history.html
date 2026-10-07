@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Inventory History - FoodHub</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        .navbar {
+            background: #111827;
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            font-size: 24px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .container {
+            width: 94%;
+            max-width: 1400px;
+            margin: 30px auto;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h2 {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .page-title p {
+            color: #6b7280;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .stat-card h3 {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filters select,
+        .filters input {
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            min-width: 200px;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f3f4f6;
+            padding: 14px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .badge {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .purchase {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .wastage {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .order {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #6b7280;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+
+<style id="foodhub-cafe-theme">
+:root{--cafe-espresso:#3b2418;--cafe-coffee:#5a3825;--cafe-caramel:#b9783f;--cafe-gold:#d6a15d;--cafe-cream:#fff8ed;--cafe-beige:#f3e5d0;--cafe-latte:#ead4b7;--cafe-text:#2f211a;--cafe-white:#fffdf9;--cafe-shadow:0 8px 24px rgba(59,36,24,.12)}
+html,body{background:var(--cafe-cream)!important;color:var(--cafe-text)!important}
+body{font-family:Georgia,'Times New Roman',serif!important}
+header,.header,.navbar,nav,.nav,.topbar,.sidebar{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+header a,.header a,.navbar a,nav a,.nav a,.topbar a,.sidebar a{color:#fff8ed!important}
+h1,h2,h3,h4,h5,h6{color:var(--cafe-espresso)!important}
+button,.btn,.button,input[type=submit],input[type=button]{background:var(--cafe-coffee)!important;color:#fff8ed!important;border-color:var(--cafe-coffee)!important;border-radius:10px!important;box-shadow:0 3px 8px rgba(59,36,24,.16)!important}
+button:hover,.btn:hover,.button:hover,input[type=submit]:hover,input[type=button]:hover{background:var(--cafe-caramel)!important;border-color:var(--cafe-caramel)!important}
+a{color:var(--cafe-coffee)}
+a:hover{color:var(--cafe-caramel)}
+.card,.food-card,.menu-card,.product-card,.order-card,.stat-card,.box,.panel,.container-card,.admin-card,.reservation-card,.review-card,.table-card,.modal-content{background:var(--cafe-white)!important;border-color:var(--cafe-latte)!important;box-shadow:var(--cafe-shadow)!important;border-radius:14px!important}
+input,select,textarea{background:#fffdf9!important;color:var(--cafe-text)!important;border:1px solid #d8b994!important;border-radius:8px!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--cafe-caramel)!important;box-shadow:0 0 0 3px rgba(185,120,63,.15)!important}
+th{background:var(--cafe-coffee)!important;color:#fff8ed!important}
+tr:nth-child(even){background:#fbf1e2!important}
+.badge,.status,.tag,.category{background:var(--cafe-beige)!important;color:var(--cafe-espresso)!important}
+.logo,.brand{color:var(--cafe-gold)!important}
+footer{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+img{border-radius:10px}
+hr{border-color:var(--cafe-latte)!important}
+.cafe-theme-badge{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--cafe-beige);color:var(--cafe-espresso);font-size:13px;font-weight:700;letter-spacing:.4px}
+</style>
+</head>
+
+<body>
+
+    <div class="navbar">
+
+        <h1>🍴 FoodHub</h1>
+
+        <div>
+            <a href="admin-dashboard.html">Dashboard</a>
+            <a href="admin-inventory.html">Inventory</a>
+        </div>
+
+    </div>
+
+
+    <div class="container">
+
+        <div class="page-title">
+
+            <h2>Inventory History</h2>
+
+            <p>
+                View all purchases, wastage and ingredient usage from orders.
+            </p>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- STATISTICS -->
+        <!-- ========================= -->
+
+        <div class="stats">
+
+            <div class="stat-card">
+                <h3>Total Movements</h3>
+                <p id="totalMovements">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Purchases</h3>
+                <p id="totalPurchases">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Wastage</h3>
+                <p id="totalWastage">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Order Usage</h3>
+                <p id="totalOrders">0</p>
+            </div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- FILTERS -->
+        <!-- ========================= -->
+
+        <div class="filters">
+
+            <select id="typeFilter" onchange="filterHistory()">
+
+                <option value="All">All Movements</option>
+
+                <option value="Purchase">
+                    Purchases
+                </option>
+
+                <option value="Wastage">
+                    Wastage
+                </option>
+
+                <option value="Order">
+                    Order Usage
+                </option>
+
+            </select>
+
+
+            <select id="ingredientFilter" onchange="filterHistory()">
+
+                <option value="All">
+                    All Ingredients
+                </option>
+
+            </select>
+
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search ingredient..."
+                oninput="filterHistory()"
+            >
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- HISTORY TABLE -->
+        <!-- ========================= -->
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Date</th>
+
+                        <th>Ingredient</th>
+
+                        <th>Type</th>
+
+                        <th>Quantity</th>
+
+                        <th>Details</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="historyTable">
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="loading"
+                        >
+                            Loading inventory history...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+<script>
+
+    let historyData = [];
+
+
+    // ==========================================
+    // LOAD HISTORY
+    // ==========================================
+
+    async function loadHistory() {
+
+        try {
+
+            const response = await fetch(
+                "/api/inventory/history"
+            );
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Failed to load history"
+                );
+
+            }
+
+            historyData = await response.json();
+
+
+            updateStatistics();
+
+            populateIngredientFilter();
+
+            displayHistory(historyData);
+
+        } catch (error) {
+
+            console.error(error);
+
+            document.getElementById(
+                "historyTable"
+            ).innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        class="empty"
+                    >
+                        Failed to load inventory history.
+                        <br><br>
+                        ${error.message}
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+    }
+
+
+    // ==========================================
+    // STATISTICS
+    // ==========================================
+
+    function updateStatistics() {
+
+        const purchases =
+            historyData.filter(
+                item => item.type === "Purchase"
+            ).length;
+
+
+        const wastage =
+            historyData.filter(
+                item => item.type === "Wastage"
+            ).length;
+
+
+        const orders =
+            historyData.filter(
+                item => item.type === "Order"
+            ).length;
+
+
+        document.getElementById(
+            "totalMovements"
+        ).textContent =
+            historyData.length;
+
+
+        document.getElementById(
+            "totalPurchases"
+        ).textContent =
+            purchases;
+
+
+        document.getElementById(
+            "totalWastage"
+        ).textContent =
+            wastage;
+
+
+        document.getElementById(
+            "totalOrders"
+        ).textContent =
+            orders;
+
+    }
+
+
+    // ==========================================
+    // INGREDIENT FILTER
+    // ==========================================
+
+    function populateIngredientFilter() {
+
+        const select =
+            document.getElementById(
+                "ingredientFilter"
+            );
+
+
+        const ingredients = [
+            ...new Set(
+                historyData
+                    .map(item => item.ingredient_name)
+                    .filter(Boolean)
+            )
+        ];
+
+
+        ingredients.sort();
+
+
+        select.innerHTML = `
+            <option value="All">
+                All Ingredients
+            </option>
+        `;
+
+
+        ingredients.forEach(
+            ingredient => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value = ingredient;
+
+                option.textContent = ingredient;
+
+                select.appendChild(option);
+
+            }
+        );
+
+    }
+
+
+    // ==========================================
+    // FILTER HISTORY
+    // ==========================================
+
+    function filterHistory() {
+
+        const type =
+            document.getElementById(
+                "typeFilter"
+            ).value;
+
+
+        const ingredient =
+            document.getElementById(
+                "ingredientFilter"
+            ).value;
+
+
+        const search =
+            document.getElementById(
+                "searchInput"
+            ).value
+            .toLowerCase();
+
+
+        const filtered =
+            historyData.filter(item => {
+
+                const typeMatch =
+                    type === "All" ||
+                    item.type === type;
+
+
+                const ingredientMatch =
+                    ingredient === "All" ||
+                    item.ingredient_name === ingredient;
+
+
+                const searchMatch =
+                    !search ||
+                    item.ingredient_name
+                        .toLowerCase()
+                        .includes(search);
+
+
+                return (
+                    typeMatch &&
+                    ingredientMatch &&
+                    searchMatch
+                );
+
+            });
+
+
+        displayHistory(filtered);
+
+    }
+
+
+    // ==========================================
+    // DISPLAY HISTORY
+    // ==========================================
+
+    function displayHistory(data) {
+
+        const table =
+            document.getElementById(
+                "historyTable"
+            );
+
+
+        if (!data || data.length === 0) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        class="empty"
+                    >
+                        No inventory history found.
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        table.innerHTML = "";
+
+
+        data.forEach(item => {
+
+            const row =
+                document.createElement("tr");
+
+
+            let badgeClass = "order";
+
+
+            if (item.type === "Purchase") {
+                badgeClass = "purchase";
+            }
+
+            if (item.type === "Wastage") {
+                badgeClass = "wastage";
+            }
+
+
+            const date =
+                item.date
+                    ? new Date(item.date)
+                        .toLocaleString()
+                    : "-";
+
+
+            let details = "-";
+
+
+            if (item.type === "Purchase") {
+
+                details =
+                    "Supplier: " +
+                    (item.supplier || "N/A");
+
+            }
+
+
+            else if (item.type === "Wastage") {
+
+                details =
+                    "Reason: " +
+                    (item.supplier || "N/A");
+
+            }
+
+
+            else if (item.type === "Order") {
+
+                details =
+                    item.supplier || "Order usage";
+
+            }
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${date}
+                </td>
+
+                <td>
+                    <strong>
+                        ${item.ingredient_name || "-"}
+                    </strong>
+                </td>
+
+                <td>
+
+                    <span class="badge ${badgeClass}">
+                        ${item.type || "-"}
+                    </span>
+
+                </td>
+
+                <td>
+                    ${item.quantity || 0}
+                    ${item.unit || ""}
+                </td>
+
+                <td>
+                    ${details}
+                </td>
+
+            `;
+
+
+            table.appendChild(row);
+
+        });
+
+    }
+
+
+    // ==========================================
+    // INITIAL LOAD
+    // ==========================================
+
+    loadHistory();
+
+
+    // ==========================================
+    // AUTO REFRESH
+    // ==========================================
+
+    setInterval(
+        loadHistory,
+        10000
+    );
+
+</script>
+
+</body>
+</html>

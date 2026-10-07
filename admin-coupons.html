@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>FoodHub - Coupons & Offers</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    color: #222;
+}
+
+.header {
+    background: #222;
+    color: white;
+    padding: 18px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    margin: 0;
+}
+
+.header button {
+    background: #e65100;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.container {
+    width: 95%;
+    max-width: 1300px;
+    margin: 25px auto;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow:
+        0 3px 12px
+        rgba(0,0,0,0.08);
+}
+
+.card h3 {
+    margin: 0 0 10px;
+    color: #666;
+}
+
+.card strong {
+    font-size: 26px;
+}
+
+.form-box {
+    background: white;
+    padding: 22px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow:
+        0 3px 12px
+        rgba(0,0,0,0.08);
+}
+
+.form-box h2 {
+    margin-top: 0;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 14px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.add-btn {
+    background: #388e3c;
+    color: white;
+    border: none;
+    padding: 11px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-box {
+    background: white;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.search-box input {
+    max-width: 400px;
+}
+
+.table-container {
+    background: white;
+    border-radius: 10px;
+    overflow-x: auto;
+    box-shadow:
+        0 3px 12px
+        rgba(0,0,0,0.08);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1000px;
+}
+
+th {
+    background: #333;
+    color: white;
+    padding: 13px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.coupon-code {
+    font-weight: bold;
+    color: #e65100;
+}
+
+.active {
+    background: #d4edda;
+    color: #155724;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.inactive {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.action-btn {
+    border: none;
+    padding: 7px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 2px;
+}
+
+.toggle {
+    background: #1976d2;
+    color: white;
+}
+
+.delete {
+    background: #c62828;
+    color: white;
+}
+
+.loading {
+    text-align: center;
+    padding: 35px;
+}
+
+@media(max-width:800px) {
+
+    .cards {
+        grid-template-columns:
+            1fr;
+    }
+
+    .form-grid {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+}
+
+@media(max-width:500px) {
+
+    .form-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+}
+
+</style>
+
+
+<style id="foodhub-cafe-theme">
+:root{--cafe-espresso:#3b2418;--cafe-coffee:#5a3825;--cafe-caramel:#b9783f;--cafe-gold:#d6a15d;--cafe-cream:#fff8ed;--cafe-beige:#f3e5d0;--cafe-latte:#ead4b7;--cafe-text:#2f211a;--cafe-white:#fffdf9;--cafe-shadow:0 8px 24px rgba(59,36,24,.12)}
+html,body{background:var(--cafe-cream)!important;color:var(--cafe-text)!important}
+body{font-family:Georgia,'Times New Roman',serif!important}
+header,.header,.navbar,nav,.nav,.topbar,.sidebar{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+header a,.header a,.navbar a,nav a,.nav a,.topbar a,.sidebar a{color:#fff8ed!important}
+h1,h2,h3,h4,h5,h6{color:var(--cafe-espresso)!important}
+button,.btn,.button,input[type=submit],input[type=button]{background:var(--cafe-coffee)!important;color:#fff8ed!important;border-color:var(--cafe-coffee)!important;border-radius:10px!important;box-shadow:0 3px 8px rgba(59,36,24,.16)!important}
+button:hover,.btn:hover,.button:hover,input[type=submit]:hover,input[type=button]:hover{background:var(--cafe-caramel)!important;border-color:var(--cafe-caramel)!important}
+a{color:var(--cafe-coffee)}
+a:hover{color:var(--cafe-caramel)}
+.card,.food-card,.menu-card,.product-card,.order-card,.stat-card,.box,.panel,.container-card,.admin-card,.reservation-card,.review-card,.table-card,.modal-content{background:var(--cafe-white)!important;border-color:var(--cafe-latte)!important;box-shadow:var(--cafe-shadow)!important;border-radius:14px!important}
+input,select,textarea{background:#fffdf9!important;color:var(--cafe-text)!important;border:1px solid #d8b994!important;border-radius:8px!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--cafe-caramel)!important;box-shadow:0 0 0 3px rgba(185,120,63,.15)!important}
+th{background:var(--cafe-coffee)!important;color:#fff8ed!important}
+tr:nth-child(even){background:#fbf1e2!important}
+.badge,.status,.tag,.category{background:var(--cafe-beige)!important;color:var(--cafe-espresso)!important}
+.logo,.brand{color:var(--cafe-gold)!important}
+footer{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+img{border-radius:10px}
+hr{border-color:var(--cafe-latte)!important}
+.cafe-theme-badge{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--cafe-beige);color:var(--cafe-espresso);font-size:13px;font-weight:700;letter-spacing:.4px}
+</style>
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <h1>
+        FoodHub Coupons & Offers
+    </h1>
+
+    <button onclick="goDashboard()">
+        Admin Dashboard
+    </button>
+
+</div>
+
+
+
+<div class="container">
+
+
+    <!-- SUMMARY -->
+
+    <div class="cards">
+
+        <div class="card">
+
+            <h3>Total Coupons</h3>
+
+            <strong id="totalCoupons">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Active Coupons</h3>
+
+            <strong id="activeCoupons">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Inactive Coupons</h3>
+
+            <strong id="inactiveCoupons">
+                0
+            </strong>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ADD COUPON -->
+
+    <div class="form-box">
+
+        <h2>
+            Create New Coupon
+        </h2>
+
+
+        <div class="form-grid">
+
+
+            <input
+                type="text"
+                id="code"
+                placeholder="Coupon code e.g. SAVE10">
+
+
+            <select id="discountType">
+
+                <option value="percentage">
+                    Percentage (%)
+                </option>
+
+                <option value="fixed">
+                    Fixed Amount (₹)
+                </option>
+
+            </select>
+
+
+            <input
+                type="number"
+                id="discountValue"
+                placeholder="Discount value"
+                min="0"
+                step="0.01">
+
+
+            <input
+                type="number"
+                id="minimumOrder"
+                placeholder="Minimum order"
+                min="0"
+                step="0.01">
+
+
+            <input
+                type="number"
+                id="maximumDiscount"
+                placeholder="Maximum discount"
+                min="0"
+                step="0.01">
+
+
+            <button
+                class="add-btn"
+                onclick="addCoupon()">
+
+                + Create Coupon
+
+            </button>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- SEARCH -->
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="search"
+            placeholder="Search coupon code...">
+
+    </div>
+
+
+
+    <!-- COUPONS -->
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Code</th>
+
+                    <th>Type</th>
+
+                    <th>Discount</th>
+
+                    <th>Minimum Order</th>
+
+                    <th>Maximum Discount</th>
+
+                    <th>Status</th>
+
+                    <th>Created</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="couponBody">
+
+                <tr>
+
+                    <td
+                        colspan="9"
+                        class="loading">
+
+                        Loading coupons...
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+const API =
+    "http://localhost:5000";
+
+
+let coupons = [];
+
+
+/* ==========================================
+   LOAD COUPONS
+========================================== */
+
+async function loadCoupons() {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/api/coupons`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Failed to load coupons"
+            );
+
+        }
+
+
+        coupons =
+            Array.isArray(data)
+                ? data
+                : data.coupons || [];
+
+
+        updateSummary();
+
+        displayCoupons();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "couponBody"
+        ).innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="9"
+                    class="loading">
+
+                    ❌ ${escapeHtml(
+                        error.message
+                    )}
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+/* ==========================================
+   SUMMARY
+========================================== */
+
+function updateSummary() {
+
+    let active = 0;
+
+
+    coupons.forEach(coupon => {
+
+        if (
+            Number(
+                coupon.active
+            ) === 1
+        ) {
+
+            active++;
+
+        }
+
+    });
+
+
+    document.getElementById(
+        "totalCoupons"
+    ).textContent =
+        coupons.length;
+
+
+    document.getElementById(
+        "activeCoupons"
+    ).textContent =
+        active;
+
+
+    document.getElementById(
+        "inactiveCoupons"
+    ).textContent =
+        coupons.length - active;
+
+}
+
+
+/* ==========================================
+   DISPLAY
+========================================== */
+
+function displayCoupons() {
+
+    const search =
+        document.getElementById(
+            "search"
+        ).value
+        .toLowerCase()
+        .trim();
+
+
+    const filtered =
+        coupons.filter(coupon => {
+
+            const code =
+                String(
+                    coupon.code || ""
+                ).toLowerCase();
+
+
+            return (
+                !search ||
+                code.includes(search)
+            );
+
+        });
+
+
+    const body =
+        document.getElementById(
+            "couponBody"
+        );
+
+
+    body.innerHTML = "";
+
+
+    if (
+        filtered.length === 0
+    ) {
+
+        body.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="9"
+                    class="loading">
+
+                    No coupons found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    filtered.forEach(coupon => {
+
+        const active =
+            Number(
+                coupon.active
+            ) === 1;
+
+
+        const type =
+            coupon.discount_type ===
+            "percentage"
+                ? "Percentage"
+                : "Fixed";
+
+
+        const discount =
+            coupon.discount_type ===
+            "percentage"
+                ? `${coupon.discount_value}%`
+                : `₹${Number(
+                    coupon.discount_value || 0
+                ).toFixed(2)}`;
+
+
+        const row =
+            document.createElement(
+                "tr"
+            );
+
+
+        row.innerHTML = `
+
+            <td>
+                ${coupon.id}
+            </td>
+
+            <td class="coupon-code">
+                ${escapeHtml(
+                    coupon.code
+                )}
+            </td>
+
+            <td>
+                ${type}
+            </td>
+
+            <td>
+                ${discount}
+            </td>
+
+            <td>
+                ₹${Number(
+                    coupon.minimum_order || 0
+                ).toFixed(2)}
+            </td>
+
+            <td>
+                ₹${Number(
+                    coupon.maximum_discount || 0
+                ).toFixed(2)}
+            </td>
+
+            <td>
+
+                <span class="${
+                    active
+                        ? "active"
+                        : "inactive"
+                }">
+
+                    ${
+                        active
+                            ? "Active"
+                            : "Inactive"
+                    }
+
+                </span>
+
+            </td>
+
+            <td>
+                ${formatDate(
+                    coupon.created_at
+                )}
+            </td>
+
+            <td>
+
+                <button
+                    class="action-btn toggle"
+                    onclick="toggleCoupon(
+                        ${coupon.id},
+                        ${active}
+                    )">
+
+                    ${
+                        active
+                            ? "Deactivate"
+                            : "Activate"
+                    }
+
+                </button>
+
+
+                <button
+                    class="action-btn delete"
+                    onclick="deleteCoupon(
+                        ${coupon.id}
+                    )">
+
+                    Delete
+
+                </button>
+
+            </td>
+
+        `;
+
+
+        body.appendChild(row);
+
+    });
+
+}
+
+
+/* ==========================================
+   ADD COUPON
+========================================== */
+
+async function addCoupon() {
+
+    const code =
+        document.getElementById(
+            "code"
+        ).value.trim().toUpperCase();
+
+
+    const discountType =
+        document.getElementById(
+            "discountType"
+        ).value;
+
+
+    const discountValue =
+        Number(
+            document.getElementById(
+                "discountValue"
+            ).value
+        );
+
+
+    const minimumOrder =
+        Number(
+            document.getElementById(
+                "minimumOrder"
+            ).value
+        ) || 0;
+
+
+    const maximumDiscount =
+        Number(
+            document.getElementById(
+                "maximumDiscount"
+            ).value
+        ) || 0;
+
+
+    if (!code) {
+
+        alert(
+            "Please enter coupon code."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !discountValue ||
+        discountValue <= 0
+    ) {
+
+        alert(
+            "Please enter a valid discount."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        discountType ===
+        "percentage" &&
+        discountValue > 100
+    ) {
+
+        alert(
+            "Percentage cannot be greater than 100."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/api/coupons`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        code,
+
+                        discount_type:
+                            discountType,
+
+                        discount_value:
+                            discountValue,
+
+                        minimum_order:
+                            minimumOrder,
+
+                        maximum_discount:
+                            maximumDiscount,
+
+                        active: 1
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Failed to create coupon"
+            );
+
+        }
+
+
+        alert(
+            "Coupon created successfully!"
+        );
+
+
+        clearForm();
+
+        loadCoupons();
+
+
+    } catch (error) {
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   TOGGLE
+========================================== */
+
+async function toggleCoupon(
+    id,
+    currentlyActive
+) {
+
+    const newStatus =
+        currentlyActive
+            ? 0
+            : 1;
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/api/coupons/${id}`,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        active:
+                            newStatus
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Failed to update coupon"
+            );
+
+        }
+
+
+        loadCoupons();
+
+
+    } catch (error) {
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   DELETE
+========================================== */
+
+async function deleteCoupon(
+    id
+) {
+
+    if (
+        !confirm(
+            "Delete this coupon?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/api/coupons/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Failed to delete coupon"
+            );
+
+        }
+
+
+        alert(
+            "Coupon deleted!"
+        );
+
+
+        loadCoupons();
+
+
+    } catch (error) {
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   CLEAR FORM
+========================================== */
+
+function clearForm() {
+
+    document.getElementById(
+        "code"
+    ).value = "";
+
+    document.getElementById(
+        "discountValue"
+    ).value = "";
+
+    document.getElementById(
+        "minimumOrder"
+    ).value = "";
+
+    document.getElementById(
+        "maximumDiscount"
+    ).value = "";
+
+}
+
+
+/* ==========================================
+   SEARCH
+========================================== */
+
+document.getElementById(
+    "search"
+).addEventListener(
+    "input",
+    displayCoupons
+);
+
+
+/* ==========================================
+   DATE
+========================================== */
+
+function formatDate(value) {
+
+    if (!value) {
+        return "-";
+    }
+
+    return String(value)
+        .replace("T", " ")
+        .substring(0, 16);
+
+}
+
+
+/* ==========================================
+   HTML SAFETY
+========================================== */
+
+function escapeHtml(value) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        value ?? "";
+
+    return div.innerHTML;
+
+}
+
+
+/* ==========================================
+   DASHBOARD
+========================================== */
+
+function goDashboard() {
+
+    window.location.href =
+        "admin-dashboard.html";
+
+}
+
+
+/* ==========================================
+   START
+========================================== */
+
+loadCoupons();
+
+
+setInterval(
+    loadCoupons,
+    30000
+);
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>FoodHub - Kitchen</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f3f4f6;
+    color: #111827;
+}
+
+
+/* HEADER */
+
+header {
+
+    background: #111827;
+
+    color: white;
+
+    padding: 18px 30px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 10;
+}
+
+header h1 {
+    font-size: 24px;
+}
+
+header span {
+    color: #d1d5db;
+}
+
+
+/* CONTAINER */
+
+.container {
+
+    max-width: 1500px;
+
+    margin: auto;
+
+    padding: 25px;
+}
+
+
+/* TOP */
+
+.top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+    flex-wrap: wrap;
+
+    gap: 15px;
+}
+
+.top h2 {
+    font-size: 28px;
+}
+
+
+button {
+
+    border: none;
+
+    padding: 10px 15px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+}
+
+
+.refresh {
+
+    background: #2563eb;
+
+    color: white;
+}
+
+
+/* STATUS FILTER */
+
+.filters {
+
+    display: flex;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+
+    margin-bottom: 25px;
+}
+
+
+.filter {
+
+    background: white;
+
+    border: 1px solid #d1d5db;
+
+    color: #374151;
+}
+
+
+.filter.active {
+
+    background: #111827;
+
+    color: white;
+}
+
+
+/* ORDERS */
+
+.orders {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(330px, 1fr));
+
+    gap: 20px;
+}
+
+
+/* CARD */
+
+.order-card {
+
+    background: white;
+
+    border-radius: 14px;
+
+    padding: 20px;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0,0,0,0.08);
+
+    border-top: 5px solid #f59e0b;
+}
+
+
+.order-card.confirmed {
+    border-top-color: #2563eb;
+}
+
+
+.order-card.preparing {
+    border-top-color: #f97316;
+}
+
+
+.order-card.ready {
+    border-top-color: #16a34a;
+}
+
+
+.order-card.served {
+    border-top-color: #7c3aed;
+}
+
+
+.order-card.completed {
+    border-top-color: #6b7280;
+}
+
+
+/* CARD HEADER */
+
+.card-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 15px;
+}
+
+
+.order-id {
+
+    font-size: 20px;
+
+    font-weight: bold;
+}
+
+
+.status {
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    background: #fef3c7;
+
+    color: #92400e;
+}
+
+
+.customer {
+
+    margin-bottom: 15px;
+
+    line-height: 1.6;
+}
+
+
+.customer strong {
+    font-size: 16px;
+}
+
+
+/* ITEMS */
+
+.items {
+
+    border-top: 1px solid #e5e7eb;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    padding: 12px 0;
+
+    margin-bottom: 15px;
+}
+
+
+.item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 6px 0;
+}
+
+
+.item-name {
+    font-weight: 500;
+}
+
+
+.item-qty {
+    font-weight: bold;
+}
+
+
+/* INFO */
+
+.info {
+
+    font-size: 13px;
+
+    color: #6b7280;
+
+    line-height: 1.7;
+
+    margin-bottom: 15px;
+}
+
+
+/* ACTION */
+
+.action {
+
+    width: 100%;
+
+    color: white;
+
+    background: #2563eb;
+}
+
+
+.action:hover {
+    opacity: 0.9;
+}
+
+
+.action.ready {
+    background: #16a34a;
+}
+
+
+.action.complete {
+    background: #7c3aed;
+}
+
+
+.cancel {
+
+    width: 100%;
+
+    margin-top: 8px;
+
+    background: #fee2e2;
+
+    color: #991b1b;
+}
+
+
+/* EMPTY */
+
+.empty {
+
+    text-align: center;
+
+    padding: 60px;
+
+    color: #6b7280;
+
+    grid-column: 1 / -1;
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:600px) {
+
+    .container {
+        padding: 15px;
+    }
+
+    .orders {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+
+
+<style id="foodhub-cafe-theme">
+:root{--cafe-espresso:#3b2418;--cafe-coffee:#5a3825;--cafe-caramel:#b9783f;--cafe-gold:#d6a15d;--cafe-cream:#fff8ed;--cafe-beige:#f3e5d0;--cafe-latte:#ead4b7;--cafe-text:#2f211a;--cafe-white:#fffdf9;--cafe-shadow:0 8px 24px rgba(59,36,24,.12)}
+html,body{background:var(--cafe-cream)!important;color:var(--cafe-text)!important}
+body{font-family:Georgia,'Times New Roman',serif!important}
+header,.header,.navbar,nav,.nav,.topbar,.sidebar{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+header a,.header a,.navbar a,nav a,.nav a,.topbar a,.sidebar a{color:#fff8ed!important}
+h1,h2,h3,h4,h5,h6{color:var(--cafe-espresso)!important}
+button,.btn,.button,input[type=submit],input[type=button]{background:var(--cafe-coffee)!important;color:#fff8ed!important;border-color:var(--cafe-coffee)!important;border-radius:10px!important;box-shadow:0 3px 8px rgba(59,36,24,.16)!important}
+button:hover,.btn:hover,.button:hover,input[type=submit]:hover,input[type=button]:hover{background:var(--cafe-caramel)!important;border-color:var(--cafe-caramel)!important}
+a{color:var(--cafe-coffee)}
+a:hover{color:var(--cafe-caramel)}
+.card,.food-card,.menu-card,.product-card,.order-card,.stat-card,.box,.panel,.container-card,.admin-card,.reservation-card,.review-card,.table-card,.modal-content{background:var(--cafe-white)!important;border-color:var(--cafe-latte)!important;box-shadow:var(--cafe-shadow)!important;border-radius:14px!important}
+input,select,textarea{background:#fffdf9!important;color:var(--cafe-text)!important;border:1px solid #d8b994!important;border-radius:8px!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--cafe-caramel)!important;box-shadow:0 0 0 3px rgba(185,120,63,.15)!important}
+th{background:var(--cafe-coffee)!important;color:#fff8ed!important}
+tr:nth-child(even){background:#fbf1e2!important}
+.badge,.status,.tag,.category{background:var(--cafe-beige)!important;color:var(--cafe-espresso)!important}
+.logo,.brand{color:var(--cafe-gold)!important}
+footer{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+img{border-radius:10px}
+hr{border-color:var(--cafe-latte)!important}
+.cafe-theme-badge{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--cafe-beige);color:var(--cafe-espresso);font-size:13px;font-weight:700;letter-spacing:.4px}
+</style>
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>🍳 FoodHub Kitchen</h1>
+
+    <span>Kitchen Display System</span>
+
+</header>
+
+
+<div class="container">
+
+
+    <div class="top">
+
+        <h2>Kitchen Orders</h2>
+
+        <button
+            class="refresh"
+            onclick="loadOrders()">
+
+            ↻ Refresh
+
+        </button>
+
+    </div>
+
+
+    <div class="filters">
+
+        <button
+            class="filter active"
+            onclick="setFilter('All', this)">
+
+            All
+
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('Pending', this)">
+
+            Pending
+
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('Confirmed', this)">
+
+            Confirmed
+
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('Preparing', this)">
+
+            Preparing
+
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('Ready', this)">
+
+            Ready
+
+        </button>
+
+        <button
+            class="filter"
+            onclick="setFilter('Served', this)">
+
+            Served
+
+        </button>
+
+    </div>
+
+
+    <div
+        class="orders"
+        id="orders">
+
+        <div class="empty">
+
+            Loading orders...
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+let allOrders = [];
+
+let currentFilter = "All";
+
+
+/* ==========================================
+   LOAD ORDERS
+========================================== */
+
+async function loadOrders() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/admin/orders"
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Failed to load orders"
+            );
+
+        }
+
+
+        allOrders = data;
+
+
+        renderOrders();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        document.getElementById(
+            "orders"
+        ).innerHTML = `
+
+            <div class="empty">
+
+                ❌
+                ${escapeHTML(
+                    error.message
+                )}
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* ==========================================
+   FILTER
+========================================== */
+
+function setFilter(
+    filter,
+    button
+) {
+
+    currentFilter =
+        filter;
+
+
+    document
+        .querySelectorAll(
+            ".filter"
+        )
+        .forEach(
+            btn =>
+                btn.classList.remove(
+                    "active"
+                )
+        );
+
+
+    button.classList.add(
+        "active"
+    );
+
+
+    renderOrders();
+
+}
+
+
+/* ==========================================
+   RENDER
+========================================== */
+
+function renderOrders() {
+
+    const container =
+        document.getElementById(
+            "orders"
+        );
+
+
+    let orders =
+        allOrders.filter(
+            order => {
+
+                if (
+                    currentFilter ===
+                    "All"
+                ) {
+
+                    return [
+                        "Pending",
+                        "Confirmed",
+                        "Preparing",
+                        "Ready",
+                        "Served"
+                    ].includes(
+                        order.status
+                    );
+
+                }
+
+
+                return (
+                    order.status ===
+                    currentFilter
+                );
+
+            }
+        );
+
+
+    if (
+        orders.length === 0
+    ) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                No ${currentFilter === "All"
+                    ? ""
+                    : currentFilter.toLowerCase()
+                } orders.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    orders.forEach(order => {
+
+        let itemsHTML = "";
+
+
+        order.items.forEach(
+            item => {
+
+                itemsHTML += `
+
+                    <div class="item">
+
+                        <span class="item-name">
+
+                            ${escapeHTML(
+                                item.food_name
+                            )}
+
+                        </span>
+
+                        <span class="item-qty">
+
+                            × ${item.quantity}
+
+                        </span>
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+
+        const next =
+            getNextStatus(
+                order.status
+            );
+
+
+        let actionHTML = "";
+
+
+        if (next) {
+
+            actionHTML = `
+
+                <button
+                    class="action
+                    ${next === "Ready"
+                        ? "ready"
+                        : ""
+                    }"
+                    onclick="
+                        updateStatus(
+                            ${order.id},
+                            '${next}'
+                        )
+                    ">
+
+                    ${getActionText(next)}
+
+                </button>
+
+            `;
+
+        }
+
+
+        if (
+            order.status !==
+            "Completed" &&
+            order.status !==
+            "Cancelled"
+        ) {
+
+            actionHTML += `
+
+                <button
+                    class="cancel"
+                    onclick="
+                        cancelOrder(
+                            ${order.id}
+                        )
+                    ">
+
+                    Cancel Order
+
+                </button>
+
+            `;
+
+        }
+
+
+        const cardClass =
+            order.status
+                .toLowerCase();
+
+
+        container.innerHTML += `
+
+            <div
+                class="order-card
+                ${cardClass}">
+
+
+                <div class="card-header">
+
+                    <div class="order-id">
+
+                        Order #${order.id}
+
+                    </div>
+
+
+                    <span class="status">
+
+                        ${order.status}
+
+                    </span>
+
+                </div>
+
+
+                <div class="customer">
+
+                    <strong>
+
+                        ${escapeHTML(
+                            order.customer_name ||
+                            "Customer"
+                        )}
+
+                    </strong>
+
+                    <br>
+
+                    📞
+                    ${escapeHTML(
+                        order.customer_phone ||
+                        "No phone"
+                    )}
+
+                </div>
+
+
+                <div class="items">
+
+                    ${itemsHTML}
+
+                </div>
+
+
+                <div class="info">
+
+                    🛍️
+                    ${escapeHTML(
+                        order.order_type ||
+                        "Delivery"
+                    )}
+
+                    <br>
+
+                    💰
+                    ₹${Number(
+                        order.total || 0
+                    ).toFixed(2)}
+
+                    <br>
+
+                    🕐
+                    ${formatDateTime(
+                        order.order_date
+                    )}
+
+                    ${
+                        order.delivery_address
+                        ? `<br>📍 ${escapeHTML(
+                            order.delivery_address
+                        )}`
+                        : ""
+                    }
+
+                </div>
+
+
+                ${actionHTML}
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+/* ==========================================
+   NEXT STATUS
+========================================== */
+
+function getNextStatus(
+    status
+) {
+
+    const flow = {
+
+        Pending:
+            "Confirmed",
+
+        Confirmed:
+            "Preparing",
+
+        Preparing:
+            "Ready",
+
+        Ready:
+            "Served",
+
+        Served:
+            "Completed"
+
+    };
+
+
+    return flow[status] ||
+        null;
+
+}
+
+
+/* ==========================================
+   ACTION TEXT
+========================================== */
+
+function getActionText(
+    status
+) {
+
+    const text = {
+
+        Confirmed:
+            "✓ Confirm Order",
+
+        Preparing:
+            "🍳 Start Preparing",
+
+        Ready:
+            "✓ Mark Ready",
+
+        Served:
+            "🍽️ Mark Served",
+
+        Completed:
+            "✓ Complete Order"
+
+    };
+
+
+    return text[status] ||
+        status;
+
+}
+
+
+/* ==========================================
+   UPDATE STATUS
+========================================== */
+
+async function updateStatus(
+    id,
+    status
+) {
+
+    try {
+
+        const response =
+            await fetch(
+
+                "/api/admin/orders/" +
+                id +
+                "/status",
+
+                {
+
+                    method: "PATCH",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            status
+
+                        })
+
+                }
+
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Failed to update order"
+            );
+
+        }
+
+
+        await loadOrders();
+
+
+    } catch (error) {
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   CANCEL
+========================================== */
+
+async function cancelOrder(
+    id
+) {
+
+    if (
+        !confirm(
+            "Cancel this order?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+
+                "/api/admin/orders/" +
+                id +
+                "/cancel",
+
+                {
+
+                    method: "PATCH"
+
+                }
+
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Failed to cancel order"
+            );
+
+        }
+
+
+        await loadOrders();
+
+
+    } catch (error) {
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   DATE TIME
+========================================== */
+
+function formatDateTime(
+    value
+) {
+
+    if (!value) {
+        return "—";
+    }
+
+
+    const date =
+        new Date(
+            value.replace(
+                " ",
+                "T"
+            )
+        );
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return value;
+
+    }
+
+
+    return date.toLocaleString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+/* ==========================================
+   ESCAPE HTML
+========================================== */
+
+function escapeHTML(
+    value
+) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* ==========================================
+   INITIAL LOAD
+========================================== */
+
+loadOrders();
+
+
+/* ==========================================
+   AUTO REFRESH
+========================================== */
+
+setInterval(
+    loadOrders,
+    10000
+);
+
+</script>
+
+
+</body>
+
+</html>

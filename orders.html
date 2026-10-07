@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>FoodHub - My Orders</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f5f7fb;
+    color: #111827;
+}
+
+
+/* HEADER */
+
+header {
+    background: #111827;
+    color: white;
+    padding: 18px 30px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 24px;
+}
+
+header span {
+    color: #d1d5db;
+    font-size: 14px;
+}
+
+
+/* CONTAINER */
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 30px 20px;
+}
+
+
+/* TITLE */
+
+.title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 25px;
+
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.title h2 {
+    font-size: 28px;
+}
+
+.refresh {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+/* ORDER CARD */
+
+.order-card {
+
+    background: white;
+
+    border-radius: 14px;
+
+    padding: 22px;
+
+    margin-bottom: 22px;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0,0,0,0.08);
+}
+
+
+/* ORDER HEADER */
+
+.order-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 18px;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+}
+
+.order-id {
+
+    font-size: 20px;
+
+    font-weight: bold;
+}
+
+.order-date {
+
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+
+/* STATUS */
+
+.status {
+
+    display: inline-block;
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    background: #fef3c7;
+
+    color: #92400e;
+}
+
+
+.status.completed {
+
+    background: #dcfce7;
+
+    color: #166534;
+}
+
+
+.status.cancelled {
+
+    background: #fee2e2;
+
+    color: #991b1b;
+}
+
+
+/* TRACKING */
+
+.tracking {
+
+    margin: 25px 0;
+
+    overflow-x: auto;
+
+    padding-bottom: 5px;
+}
+
+
+.track-row {
+
+    min-width: 650px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    position: relative;
+}
+
+
+.track-line {
+
+    position: absolute;
+
+    top: 16px;
+
+    left: 8%;
+
+    right: 8%;
+
+    height: 4px;
+
+    background: #e5e7eb;
+
+    z-index: 0;
+}
+
+
+.track-progress {
+
+    position: absolute;
+
+    top: 16px;
+
+    left: 8%;
+
+    height: 4px;
+
+    background: #16a34a;
+
+    z-index: 1;
+
+    transition: width 0.4s ease;
+}
+
+
+.step {
+
+    position: relative;
+
+    z-index: 2;
+
+    text-align: center;
+
+    width: 16.66%;
+}
+
+
+.circle {
+
+    width: 34px;
+
+    height: 34px;
+
+    border-radius: 50%;
+
+    background: #e5e7eb;
+
+    color: #6b7280;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    margin: auto;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    border: 3px solid white;
+}
+
+
+.step.active .circle {
+
+    background: #16a34a;
+
+    color: white;
+}
+
+
+.step.current .circle {
+
+    background: #2563eb;
+
+    color: white;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(37,99,235,0.15);
+}
+
+
+.step-label {
+
+    margin-top: 8px;
+
+    font-size: 11px;
+
+    color: #6b7280;
+}
+
+
+.step.active .step-label {
+
+    color: #166534;
+
+    font-weight: bold;
+}
+
+
+.step.current .step-label {
+
+    color: #2563eb;
+
+    font-weight: bold;
+}
+
+
+/* ORDER INFO */
+
+.info-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 18px;
+}
+
+
+.info-box {
+
+    background: #f9fafb;
+
+    padding: 13px;
+
+    border-radius: 8px;
+}
+
+
+.info-box small {
+
+    display: block;
+
+    color: #6b7280;
+
+    margin-bottom: 5px;
+}
+
+
+.info-box strong {
+
+    font-size: 14px;
+}
+
+
+/* TOTAL */
+
+.total {
+
+    border-top: 1px solid #e5e7eb;
+
+    padding-top: 15px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    font-size: 18px;
+
+    font-weight: bold;
+}
+
+
+/* BUTTON */
+
+.invoice-btn {
+
+    background: #111827;
+
+    color: white;
+
+    border: none;
+
+    padding: 9px 15px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    margin-top: 15px;
+}
+
+
+/* EMPTY */
+
+.empty {
+
+    background: white;
+
+    padding: 60px;
+
+    text-align: center;
+
+    border-radius: 12px;
+
+    color: #6b7280;
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:700px) {
+
+    .container {
+        padding: 20px 12px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+
+
+<style id="foodhub-cafe-theme">
+:root{--cafe-espresso:#3b2418;--cafe-coffee:#5a3825;--cafe-caramel:#b9783f;--cafe-gold:#d6a15d;--cafe-cream:#fff8ed;--cafe-beige:#f3e5d0;--cafe-latte:#ead4b7;--cafe-text:#2f211a;--cafe-white:#fffdf9;--cafe-shadow:0 8px 24px rgba(59,36,24,.12)}
+html,body{background:var(--cafe-cream)!important;color:var(--cafe-text)!important}
+body{font-family:Georgia,'Times New Roman',serif!important}
+header,.header,.navbar,nav,.nav,.topbar,.sidebar{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+header a,.header a,.navbar a,nav a,.nav a,.topbar a,.sidebar a{color:#fff8ed!important}
+h1,h2,h3,h4,h5,h6{color:var(--cafe-espresso)!important}
+button,.btn,.button,input[type=submit],input[type=button]{background:var(--cafe-coffee)!important;color:#fff8ed!important;border-color:var(--cafe-coffee)!important;border-radius:10px!important;box-shadow:0 3px 8px rgba(59,36,24,.16)!important}
+button:hover,.btn:hover,.button:hover,input[type=submit]:hover,input[type=button]:hover{background:var(--cafe-caramel)!important;border-color:var(--cafe-caramel)!important}
+a{color:var(--cafe-coffee)}
+a:hover{color:var(--cafe-caramel)}
+.card,.food-card,.menu-card,.product-card,.order-card,.stat-card,.box,.panel,.container-card,.admin-card,.reservation-card,.review-card,.table-card,.modal-content{background:var(--cafe-white)!important;border-color:var(--cafe-latte)!important;box-shadow:var(--cafe-shadow)!important;border-radius:14px!important}
+input,select,textarea{background:#fffdf9!important;color:var(--cafe-text)!important;border:1px solid #d8b994!important;border-radius:8px!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--cafe-caramel)!important;box-shadow:0 0 0 3px rgba(185,120,63,.15)!important}
+th{background:var(--cafe-coffee)!important;color:#fff8ed!important}
+tr:nth-child(even){background:#fbf1e2!important}
+.badge,.status,.tag,.category{background:var(--cafe-beige)!important;color:var(--cafe-espresso)!important}
+.logo,.brand{color:var(--cafe-gold)!important}
+footer{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+img{border-radius:10px}
+hr{border-color:var(--cafe-latte)!important}
+.cafe-theme-badge{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--cafe-beige);color:var(--cafe-espresso);font-size:13px;font-weight:700;letter-spacing:.4px}
+</style>
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>🍽️ FoodHub</h1>
+
+    <span>My Orders</span>
+
+</header>
+
+
+<div class="container">
+
+
+    <div class="title">
+
+        <h2>My Orders</h2>
+
+        <button
+            class="refresh"
+            onclick="loadOrders()">
+
+            ↻ Refresh
+
+        </button>
+
+    </div>
+
+
+    <div id="orders">
+
+        <div class="empty">
+
+            Loading orders...
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+/* ==========================================
+   GET USER
+========================================== */
+
+const user =
+    JSON.parse(
+        localStorage.getItem(
+            "foodhubUser"
+        )
+    );
+
+
+if (!user) {
+
+    alert(
+        "Please login first."
+    );
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* ==========================================
+   LOAD ORDERS
+========================================== */
+
+async function loadOrders() {
+
+    const container =
+        document.getElementById(
+            "orders"
+        );
+
+
+    container.innerHTML = `
+
+        <div class="empty">
+
+            Loading orders...
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+
+                "/api/orders/user/" +
+                user.id
+
+            );
+
+
+        const orders =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                orders.message ||
+                "Failed to load orders"
+            );
+
+        }
+
+
+        if (
+            !orders ||
+            orders.length === 0
+        ) {
+
+            container.innerHTML = `
+
+                <div class="empty">
+
+                    <h3>
+                        No orders yet
+                    </h3>
+
+                    <br>
+
+                    <p>
+                        Your orders will appear here.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML = "";
+
+
+        orders.forEach(
+            order => {
+
+                container.innerHTML +=
+                    createOrderCard(
+                        order
+                    );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                ❌
+                ${escapeHTML(
+                    error.message
+                )}
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* ==========================================
+   CREATE ORDER CARD
+========================================== */
+
+function createOrderCard(
+    order
+) {
+
+    const status =
+        order.status ||
+        "Pending";
+
+
+    const statusClass =
+        status === "Completed"
+            ? "completed"
+            : status === "Cancelled"
+                ? "cancelled"
+                : "";
+
+
+    let tracking = "";
+
+
+    if (
+        status === "Cancelled"
+    ) {
+
+        tracking = `
+
+            <div class="tracking">
+
+                <div style="
+                    text-align:center;
+                    color:#991b1b;
+                    font-weight:bold;
+                    padding:20px;
+                ">
+
+                    ❌ Order Cancelled
+
+                </div>
+
+            </div>
+
+        `;
+
+    } else {
+
+        tracking =
+            createTracking(
+                status
+            );
+
+    }
+
+
+    return `
+
+        <div class="order-card">
+
+
+            <div class="order-header">
+
+
+                <div>
+
+                    <div class="order-id">
+
+                        Order #${order.id}
+
+                    </div>
+
+
+                    <div class="order-date">
+
+                        ${formatDateTime(
+                            order.order_date
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <span
+                    class="status
+                    ${statusClass}">
+
+                    ${escapeHTML(
+                        status
+                    )}
+
+                </span>
+
+
+            </div>
+
+
+            ${tracking}
+
+
+            <div class="info-grid">
+
+
+                <div class="info-box">
+
+                    <small>
+                        Order Type
+                    </small>
+
+                    <strong>
+
+                        ${escapeHTML(
+                            order.order_type ||
+                            "Delivery"
+                        )}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <small>
+                        Payment
+                    </small>
+
+                    <strong>
+
+                        ${escapeHTML(
+                            order.payment_method ||
+                            "WhatsApp"
+                        )}
+
+                        -
+
+                        ${escapeHTML(
+                            order.payment_status ||
+                            "Pending"
+                        )}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <small>
+                        Phone
+                    </small>
+
+                    <strong>
+
+                        ${escapeHTML(
+                            order.customer_phone ||
+                            "—"
+                        )}
+
+                    </strong>
+
+                </div>
+
+
+                ${
+                    order.delivery_address
+                    ? `
+
+                    <div class="info-box"
+                         style="grid-column:1/-1">
+
+                        <small>
+                            Delivery Address
+                        </small>
+
+                        <strong>
+
+                            ${escapeHTML(
+                                order.delivery_address
+                            )}
+
+                        </strong>
+
+                    </div>
+
+                    `
+                    : ""
+                }
+
+
+            </div>
+
+
+            <div class="total">
+
+                <span>
+                    Total
+                </span>
+
+                <span>
+                    ₹${Number(
+                        order.total || 0
+                    ).toFixed(2)}
+                </span>
+
+            </div>
+
+
+            <button
+                class="invoice-btn"
+                onclick="
+                    viewInvoice(
+                        ${order.id}
+                    )
+                ">
+
+                🧾 View Invoice
+
+            </button>
+
+
+        </div>
+
+    `;
+
+}
+
+
+/* ==========================================
+   TRACKING
+========================================== */
+
+function createTracking(
+    status
+) {
+
+    const steps = [
+
+        "Pending",
+
+        "Confirmed",
+
+        "Preparing",
+
+        "Ready",
+
+        "Served",
+
+        "Completed"
+
+    ];
+
+
+    let currentIndex =
+        steps.indexOf(
+            status
+        );
+
+
+    if (
+        currentIndex < 0
+    ) {
+
+        currentIndex = 0;
+
+    }
+
+
+    let stepsHTML = "";
+
+
+    steps.forEach(
+        (step, index) => {
+
+            let className = "";
+
+
+            if (
+                index < currentIndex
+            ) {
+
+                className =
+                    "active";
+
+            }
+
+
+            if (
+                index === currentIndex
+            ) {
+
+                className =
+                    "current";
+
+            }
+
+
+            stepsHTML += `
+
+                <div
+                    class="step
+                    ${className}">
+
+                    <div class="circle">
+
+                        ${
+                            index <
+                            currentIndex
+                                ? "✓"
+                                : index + 1
+                        }
+
+                    </div>
+
+                    <div class="step-label">
+
+                        ${step}
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    const progress =
+        currentIndex === 0
+            ? 0
+            : (
+                currentIndex /
+                (steps.length - 1)
+            ) * 84;
+
+
+    return `
+
+        <div class="tracking">
+
+            <div class="track-row">
+
+
+                <div
+                    class="track-line">
+                </div>
+
+
+                <div
+                    class="track-progress"
+                    style="
+                        width:${progress}%;
+                    ">
+                </div>
+
+
+                ${stepsHTML}
+
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ==========================================
+   VIEW INVOICE
+========================================== */
+
+function viewInvoice(
+    id
+) {
+
+    window.location.href =
+        "invoice.html?id=" +
+        id;
+
+}
+
+
+/* ==========================================
+   DATE FORMAT
+========================================== */
+
+function formatDateTime(
+    value
+) {
+
+    if (!value) {
+        return "—";
+    }
+
+
+    const date =
+        new Date(
+            value.replace(
+                " ",
+                "T"
+            )
+        );
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return value;
+
+    }
+
+
+    return date.toLocaleString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+/* ==========================================
+   ESCAPE HTML
+========================================== */
+
+function escapeHTML(
+    value
+) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* ==========================================
+   INITIAL LOAD
+========================================== */
+
+loadOrders();
+
+
+/* ==========================================
+   AUTO REFRESH
+========================================== */
+
+setInterval(
+    loadOrders,
+    10000
+);
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>FoodHub - Inventory</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    color: #222;
+}
+
+.header {
+    background: #222;
+    color: white;
+    padding: 18px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    margin: 0;
+}
+
+.header button {
+    background: #e65100;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.container {
+    width: 95%;
+    max-width: 1400px;
+    margin: 25px auto;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.card h3 {
+    margin: 0 0 10px;
+    color: #666;
+}
+
+.card strong {
+    font-size: 26px;
+}
+
+.add-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.add-box h2 {
+    margin-top: 0;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.add-btn {
+    background: #388e3c;
+    color: white;
+    border: none;
+    padding: 11px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-box {
+    background: white;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.search-box input {
+    max-width: 400px;
+}
+
+.table-container {
+    background: white;
+    border-radius: 10px;
+    overflow-x: auto;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1100px;
+}
+
+th {
+    background: #333;
+    color: white;
+    padding: 13px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.low {
+    color: #c62828;
+    font-weight: bold;
+}
+
+.good {
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+.action-btn {
+    border: none;
+    padding: 7px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 2px;
+}
+
+.purchase {
+    background: #1976d2;
+    color: white;
+}
+
+.wastage {
+    background: #f57c00;
+    color: white;
+}
+
+.edit {
+    background: #7b1fa2;
+    color: white;
+}
+
+.delete {
+    background: #c62828;
+    color: white;
+}
+
+.loading {
+    text-align: center;
+    padding: 35px;
+}
+
+@media(max-width:900px) {
+
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media(max-width:550px) {
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+
+
+<style id="foodhub-cafe-theme">
+:root{--cafe-espresso:#3b2418;--cafe-coffee:#5a3825;--cafe-caramel:#b9783f;--cafe-gold:#d6a15d;--cafe-cream:#fff8ed;--cafe-beige:#f3e5d0;--cafe-latte:#ead4b7;--cafe-text:#2f211a;--cafe-white:#fffdf9;--cafe-shadow:0 8px 24px rgba(59,36,24,.12)}
+html,body{background:var(--cafe-cream)!important;color:var(--cafe-text)!important}
+body{font-family:Georgia,'Times New Roman',serif!important}
+header,.header,.navbar,nav,.nav,.topbar,.sidebar{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+header a,.header a,.navbar a,nav a,.nav a,.topbar a,.sidebar a{color:#fff8ed!important}
+h1,h2,h3,h4,h5,h6{color:var(--cafe-espresso)!important}
+button,.btn,.button,input[type=submit],input[type=button]{background:var(--cafe-coffee)!important;color:#fff8ed!important;border-color:var(--cafe-coffee)!important;border-radius:10px!important;box-shadow:0 3px 8px rgba(59,36,24,.16)!important}
+button:hover,.btn:hover,.button:hover,input[type=submit]:hover,input[type=button]:hover{background:var(--cafe-caramel)!important;border-color:var(--cafe-caramel)!important}
+a{color:var(--cafe-coffee)}
+a:hover{color:var(--cafe-caramel)}
+.card,.food-card,.menu-card,.product-card,.order-card,.stat-card,.box,.panel,.container-card,.admin-card,.reservation-card,.review-card,.table-card,.modal-content{background:var(--cafe-white)!important;border-color:var(--cafe-latte)!important;box-shadow:var(--cafe-shadow)!important;border-radius:14px!important}
+input,select,textarea{background:#fffdf9!important;color:var(--cafe-text)!important;border:1px solid #d8b994!important;border-radius:8px!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--cafe-caramel)!important;box-shadow:0 0 0 3px rgba(185,120,63,.15)!important}
+th{background:var(--cafe-coffee)!important;color:#fff8ed!important}
+tr:nth-child(even){background:#fbf1e2!important}
+.badge,.status,.tag,.category{background:var(--cafe-beige)!important;color:var(--cafe-espresso)!important}
+.logo,.brand{color:var(--cafe-gold)!important}
+footer{background:var(--cafe-espresso)!important;color:#fff8ed!important}
+img{border-radius:10px}
+hr{border-color:var(--cafe-latte)!important}
+.cafe-theme-badge{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--cafe-beige);color:var(--cafe-espresso);font-size:13px;font-weight:700;letter-spacing:.4px}
+</style>
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <h1>FoodHub Inventory</h1>
+
+    <button onclick="goDashboard()">
+        Admin Dashboard
+    </button>
+
+</div>
+
+
+
+<div class="container">
+
+
+    <!-- SUMMARY -->
+
+    <div class="cards">
+
+        <div class="card">
+
+            <h3>Total Ingredients</h3>
+
+            <strong id="totalIngredients">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Low Stock</h3>
+
+            <strong id="lowStock">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Total Stock Value</h3>
+
+            <strong>
+                ₹<span id="stockValue">
+                    0.00
+                </span>
+            </strong>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Out of Stock</h3>
+
+            <strong id="outOfStock">
+                0
+            </strong>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ADD INGREDIENT -->
+
+    <div class="add-box">
+
+        <h2>
+            Add Ingredient
+        </h2>
+
+
+        <div class="form-grid">
+
+            <input
+                type="text"
+                id="name"
+                placeholder="Ingredient name">
+
+
+            <input
+                type="text"
+                id="unit"
+                placeholder="Unit e.g. kg, litre">
+
+
+            <input
+                type="number"
+                id="stock"
+                placeholder="Initial stock"
+                min="0"
+                step="0.01">
+
+
+            <input
+                type="number"
+                id="minimumStock"
+                placeholder="Minimum stock"
+                min="0"
+                step="0.01">
+
+
+            <input
+                type="number"
+                id="price"
+                placeholder="Price per unit"
+                min="0"
+                step="0.01">
+
+
+            <input
+                type="text"
+                id="supplier"
+                placeholder="Supplier">
+
+
+            <button
+                class="add-btn"
+                onclick="addIngredient()">
+
+                + Add Ingredient
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- SEARCH -->
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="search"
+            placeholder="Search ingredient or supplier...">
+
+    </div>
+
+
+
+    <!-- INVENTORY -->
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Ingredient</th>
+
+                    <th>Unit</th>
+
+                    <th>Stock</th>
+
+                    <th>Minimum</th>
+
+                    <th>Price</th>
+
+                    <th>Stock Value</th>
+
+                    <th>Supplier</th>
+
+                    <th>Status</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="inventoryBody">
+
+                <tr>
+
+                    <td
+                        colspan="10"
+                        class="loading">
+
+                        Loading inventory...
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+const API =
+    "http://localhost:5000";
+
+
+let inventory = [];
+
+
+/* ==========================================
+   LOAD INVENTORY
+========================================== */
+
+async function loadInventory() {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/api/inventory`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Failed to load inventory"
+            );
+
+        }
+
+
+        inventory =
+            Array.isArray(data)
+                ? data
+                : data.inventory || [];
+
+
+        updateSummary();
+
+
+        displayInventory();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "inventoryBody"
+        ).innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="10"
+                    class="loading">
+
+                    ❌ ${escapeHtml(
+                        error.message
+                    )}
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+/* ==========================================
+   SUMMARY
+========================================== */
+
+function updateSummary() {
+
+    let low = 0;
+
+    let out = 0;
+
+    let value = 0;
+
+
+    inventory.forEach(item => {
+
+        const stock =
+            Number(
+                item.stock || 0
+            );
+
+        const minimum =
+            Number(
+                item.minimum_stock || 0
+            );
+
+        const price =
+            Number(
+                item.price || 0
+            );
+
+
+        value +=
+            stock * price;
+
+
+        if (stock <= 0) {
+
+            out++;
+
+        } else if (
+            stock <= minimum
+        ) {
+
+            low++;
+
+        }
+
+    });
+
+
+    document.getElementById(
+        "totalIngredients"
+    ).textContent =
+        inventory.length;
+
+
+    document.getElementById(
+        "lowStock"
+    ).textContent =
+        low;
+
+
+    document.getElementById(
+        "outOfStock"
+    ).textContent =
+        out;
+
+
+    document.getElementById(
+        "stockValue"
+    ).textContent =
+        value.toFixed(2);
+
+}
+
+
+/* ==========================================
+   DISPLAY INVENTORY
+========================================== */
+
+function displayInventory() {
+
+    const search =
+        document.getElementById(
+            "search"
+        ).value
+        .toLowerCase()
+        .trim();
+
+
+    const filtered =
+        inventory.filter(item => {
+
+            const name =
+                String(
+                    item.name || ""
+                ).toLowerCase();
+
+
+            const supplier =
+                String(
+                    item.supplier || ""
+                ).toLowerCase();
+
+
+            return (
+                !search ||
+                name.includes(search) ||
+                supplier.includes(search)
+            );
+
+        });
+
+
+    const body =
+        document.getElementById(
+            "inventoryBody"
+        );
+
+
+    body.innerHTML = "";
+
+
+    if (filtered.length === 0) {
+
+        body.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="10"
+                    class="loading">
+
+                    No ingredients found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    filtered.forEach(item => {
+
+        const stock =
+            Number(
+                item.stock || 0
+            );
+
+        const minimum =
+            Number(
+                item.minimum_stock || 0
+            );
+
+        const price =
+            Number(
+                item.price || 0
+            );
+
+
+        const stockValue =
+            stock * price;
+
+
+        let status =
+            "Good";
+
+        let statusClass =
+            "good";
+
+
+        if (stock <= 0) {
+
+            status =
+                "Out of Stock";
+
+            statusClass =
+                "low";
+
+        } else if (
+            stock <= minimum
+        ) {
+
+            status =
+                "Low Stock";
+
+            statusClass =
+                "low";
+
+        }
+
+
+        const row =
+            document.createElement(
+                "tr"
+            );
+
+
+        row.innerHTML = `
+
+            <td>
+                ${item.id}
+            </td>
+
+            <td>
+                <strong>
+                    ${escapeHtml(
+                        item.name
+                    )}
+                </strong>
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    item.unit || "-"
+                )}
+            </td>
+
+            <td>
+                ${stock}
+            </td>
+
+            <td>
+                ${minimum}
+            </td>
+
+            <td>
+                ₹${price.toFixed(2)}
+            </td>
+
+            <td>
+                ₹${stockValue.toFixed(2)}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    item.supplier || "-"
+                )}
+            </td>
+
+            <td>
+
+                <span class="${statusClass}">
+                    ${status}
+                </span>
+
+            </td>
+
+            <td>
+
+                <button
+                    class="action-btn purchase"
+                    onclick="purchaseStock(
+                        ${item.id}
+                    )">
+
+                    Purchase
+
+                </button>
+
+
+                <button
+                    class="action-btn wastage"
+                    onclick="recordWastage(
+                        ${item.id}
+                    )">
+
+                    Wastage
+
+                </button>
+
+
+                <button
+                    class="action-btn edit"
+                    onclick="editIngredient(
+                        ${item.id}
+                    )">
+
+                    Edit
+
+                </button>
+
+
+                <button
+                    class="action-btn delete"
+                    onclick="deleteIngredient(
+                        ${item.id}
+                    )">
+
+                    Delete
+
+                </button>
+
+            </td>
+
+        `;
+
+
+        body.appendChild(row);
+
+    });
+
+}
+
+
+/* ==========================================
+   ADD INGREDIENT
+========================================== */
+
+async function addIngredient() {
+
+    const name =
+        document.getElementById(
+            "name"
+        ).value.trim();
+
+
+    const unit =
+        document.getElementById(
+            "unit"
+        ).value.trim();
+
+
+    const stock =
+        Number(
+            document.getElementById(
+                "stock"
+            ).value
+        );
+
+
+    const minimumStock =
+        Number(
+            document.getElementById(
+                "minimumStock"
+            ).value
+        );
+
+
+    const price =
+        Number(
+            document.getElementById(
+                "price"
+            ).value
+        );
+
+
+    const supplier =
+        document.getElementById(
+            "supplier"
+        ).value.trim();
+
+
+    if (!name || !unit) {
+
+        alert(
+            "Please enter ingredient name and unit."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/api/inventory`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        name,
+
+                        unit,
+
+                        stock:
+                            stock || 0,
+
+                        minimum_stock:
+                            minimumStock || 0,
+
+                        price:
+                            price || 0,
+
+                        supplier
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Failed to add ingredient"
+            );
+
+        }
+
+
+        alert(
+            "Ingredient added successfully!"
+        );
+
+
+        clearForm();
+
+
+        loadInventory();
+
+
+    } catch (error) {
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   PURCHASE STOCK
+========================================== */
+
+async function purchaseStock(
+    ingredientId
+) {
+
+    const quantity =
+        Number(
+            prompt(
+                "Enter purchase quantity:"
+            )
+        );
+
+
+    if (
+        !quantity ||
+        quantity <= 0
+    ) {
+
+        return;
+
+    }
+
+
+    const price =
+        Number(
+            prompt(
+                "Enter purchase price:"
+            ) || 0
+        );
+
+
+    const supplier =
+        prompt(
+            "Enter supplier name:"
+        ) || "";
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/api/inventory/purchase`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        ingredient_id:
+                            ingredientId,
+
+                        quantity,
+
+                        price,
+
+                        supplier
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Purchase failed"
+            );
+
+        }
+
+
+        alert(
+            "Stock purchased successfully!"
+        );
+
+
+        loadInventory();
+
+
+    } catch (error) {
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   WASTAGE
+========================================== */
+
+async function recordWastage(
+    ingredientId
+) {
+
+    const quantity =
+        Number(
+            prompt(
+                "Enter wastage quantity:"
+            )
+        );
+
+
+    if (
+        !quantity ||
+        quantity <= 0
+    ) {
+
+        return;
+
+    }
+
+
+    const reason =
+        prompt(
+            "Enter wastage reason:"
+        ) || "";
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/api/inventory/wastage`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        ingredient_id:
+                            ingredientId,
+
+                        quantity,
+
+                        reason
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Wastage failed"
+            );
+
+        }
+
+
+        alert(
+            "Wastage recorded!"
+        );
+
+
+        loadInventory();
+
+
+    } catch (error) {
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   EDIT
+========================================== */
+
+async function editIngredient(
+    id
+) {
+
+    const item =
+        inventory.find(
+            x =>
+                Number(x.id) ===
+                Number(id)
+        );
+
+
+    if (!item) {
+
+        return;
+
+    }
+
+
+    const name =
+        prompt(
+            "Ingredient name:",
+            item.name
+        );
+
+
+    if (!name) {
+        return;
+    }
+
+
+    const unit =
+        prompt(
+            "Unit:",
+            item.unit
+        );
+
+
+    if (!unit) {
+        return;
+    }
+
+
+    const stock =
+        Number(
+            prompt(
+                "Stock:",
+                item.stock
+            )
+        );
+
+
+    const minimumStock =
+        Number(
+            prompt(
+                "Minimum stock:",
+                item.minimum_stock
+            )
+        );
+
+
+    const price =
+        Number(
+            prompt(
+                "Price per unit:",
+                item.price
+            )
+        );
+
+
+    const supplier =
+        prompt(
+            "Supplier:",
+            item.supplier || ""
+        ) || "";
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/api/inventory/${id}`,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        name,
+
+                        unit,
+
+                        stock,
+
+                        minimum_stock:
+                            minimumStock,
+
+                        price,
+
+                        supplier
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Update failed"
+            );
+
+        }
+
+
+        alert(
+            "Ingredient updated!"
+        );
+
+
+        loadInventory();
+
+
+    } catch (error) {
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   DELETE
+========================================== */
+
+async function deleteIngredient(
+    id
+) {
+
+    if (
+        !confirm(
+            "Delete this ingredient?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/api/inventory/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Delete failed"
+            );
+
+        }
+
+
+        alert(
+            "Ingredient deleted!"
+        );
+
+
+        loadInventory();
+
+
+    } catch (error) {
+
+        alert(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   CLEAR FORM
+========================================== */
+
+function clearForm() {
+
+    document.getElementById(
+        "name"
+    ).value = "";
+
+    document.getElementById(
+        "unit"
+    ).value = "";
+
+    document.getElementById(
+        "stock"
+    ).value = "";
+
+    document.getElementById(
+        "minimumStock"
+    ).value = "";
+
+    document.getElementById(
+        "price"
+    ).value = "";
+
+    document.getElementById(
+        "supplier"
+    ).value = "";
+
+}
+
+
+/* ==========================================
+   DASHBOARD
+========================================== */
+
+function goDashboard() {
+
+    window.location.href =
+        "admin-dashboard.html";
+
+}
+
+
+/* ==========================================
+   HTML SAFETY
+========================================== */
+
+function escapeHtml(value) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        value ?? "";
+
+    return div.innerHTML;
+
+}
+
+
+/* ==========================================
+   SEARCH
+========================================== */
+
+document.getElementById(
+    "search"
+).addEventListener(
+    "input",
+    displayInventory
+);
+
+
+/* ==========================================
+   START
+========================================== */
+
+loadInventory();
+
+
+/* AUTO REFRESH */
+
+setInterval(
+    loadInventory,
+    30000
+);
+
+</script>
+
+</body>
+
+</html>
