@@ -1,147 +1,267 @@
+```html
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FoodHub - Login</title>
 
     <style>
+        :root {
+            --cafe-espresso: #3b2418;
+            --cafe-coffee: #5a3825;
+            --cafe-caramel: #b9783f;
+            --cafe-gold: #d6a15d;
+            --cafe-cream: #fff8ed;
+            --cafe-beige: #f3e5d0;
+            --cafe-latte: #ead4b7;
+            --cafe-text: #2f211a;
+            --cafe-white: #fffdf9;
+            --cafe-shadow: 0 8px 24px rgba(59, 36, 24, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial;
-            background: #f5f5f5;
+            margin: 0;
+            min-height: 100vh;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            font-family: Georgia, "Times New Roman", serif;
+            background: var(--cafe-cream);
+            color: var(--cafe-text);
         }
 
         .box {
-            background: white;
-            padding: 30px;
-            width: 350px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px #ccc;
+            background: var(--cafe-white);
+            padding: 32px;
+            width: 100%;
+            max-width: 390px;
+            border: 1px solid var(--cafe-latte);
+            border-radius: 14px;
+            box-shadow: var(--cafe-shadow);
         }
 
         h1 {
             text-align: center;
-            color: #ff5722;
+            color: var(--cafe-espresso);
+            margin: 0 0 8px;
+            font-size: 34px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--cafe-caramel);
+            margin-bottom: 28px;
+        }
+
+        h2 {
+            color: var(--cafe-espresso);
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            margin: 12px 0 6px;
+            font-weight: bold;
         }
 
         input {
+            display: block;
             width: 100%;
             padding: 12px;
-            margin: 8px 0;
-            box-sizing: border-box;
+            margin-bottom: 14px;
+            background: var(--cafe-white);
+            color: var(--cafe-text);
+            border: 1px solid #d8b994;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--cafe-caramel);
+            box-shadow: 0 0 0 3px rgba(185, 120, 63, 0.15);
         }
 
         button {
             width: 100%;
-            padding: 12px;
-            background: #ff5722;
-            color: white;
+            padding: 13px;
+            margin-top: 8px;
+            background: var(--cafe-coffee);
+            color: var(--cafe-cream);
             border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            margin-top: 10px;
+            box-shadow: 0 3px 8px rgba(59, 36, 24, 0.16);
         }
 
-        p {
+        button:hover {
+            background: var(--cafe-caramel);
+        }
+
+        button:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        #message {
             text-align: center;
+            overflow-wrap: anywhere;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 22px;
         }
 
         a {
-            color: #ff5722;
+            color: var(--cafe-coffee);
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: var(--cafe-caramel);
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 14px;
         }
     </style>
-
-<style id="foodhub-cafe-theme">
-:root{--cafe-espresso:#3b2418;--cafe-coffee:#5a3825;--cafe-caramel:#b9783f;--cafe-gold:#d6a15d;--cafe-cream:#fff8ed;--cafe-beige:#f3e5d0;--cafe-latte:#ead4b7;--cafe-text:#2f211a;--cafe-white:#fffdf9;--cafe-shadow:0 8px 24px rgba(59,36,24,.12)}
-html,body{background:var(--cafe-cream)!important;color:var(--cafe-text)!important}
-body{font-family:Georgia,'Times New Roman',serif!important}
-header,.header,.navbar,nav,.nav,.topbar,.sidebar{background:var(--cafe-espresso)!important;color:#fff8ed!important}
-header a,.header a,.navbar a,nav a,.nav a,.topbar a,.sidebar a{color:#fff8ed!important}
-h1,h2,h3,h4,h5,h6{color:var(--cafe-espresso)!important}
-button,.btn,.button,input[type=submit],input[type=button]{background:var(--cafe-coffee)!important;color:#fff8ed!important;border-color:var(--cafe-coffee)!important;border-radius:10px!important;box-shadow:0 3px 8px rgba(59,36,24,.16)!important}
-button:hover,.btn:hover,.button:hover,input[type=submit]:hover,input[type=button]:hover{background:var(--cafe-caramel)!important;border-color:var(--cafe-caramel)!important}
-a{color:var(--cafe-coffee)}
-a:hover{color:var(--cafe-caramel)}
-.card,.food-card,.menu-card,.product-card,.order-card,.stat-card,.box,.panel,.container-card,.admin-card,.reservation-card,.review-card,.table-card,.modal-content{background:var(--cafe-white)!important;border-color:var(--cafe-latte)!important;box-shadow:var(--cafe-shadow)!important;border-radius:14px!important}
-input,select,textarea{background:#fffdf9!important;color:var(--cafe-text)!important;border:1px solid #d8b994!important;border-radius:8px!important}
-input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--cafe-caramel)!important;box-shadow:0 0 0 3px rgba(185,120,63,.15)!important}
-th{background:var(--cafe-coffee)!important;color:#fff8ed!important}
-tr:nth-child(even){background:#fbf1e2!important}
-.badge,.status,.tag,.category{background:var(--cafe-beige)!important;color:var(--cafe-espresso)!important}
-.logo,.brand{color:var(--cafe-gold)!important}
-footer{background:var(--cafe-espresso)!important;color:#fff8ed!important}
-img{border-radius:10px}
-hr{border-color:var(--cafe-latte)!important}
-.cafe-theme-badge{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--cafe-beige);color:var(--cafe-espresso);font-size:13px;font-weight:700;letter-spacing:.4px}
-</style>
 </head>
 
 <body>
+    <div class="box">
+        <h1>FoodHub</h1>
+        <p class="subtitle">Fresh food, happy mood!</p>
 
-<div class="box">
+        <h2>Login</h2>
 
-    <h1>FoodHub</h1>
+        <form id="loginForm">
+            <label for="email">Email</label>
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your email"
+                autocomplete="email"
+                required
+            >
 
-    <h2>Login</h2>
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+            >
 
-    <input type="email" id="email" placeholder="Email">
+            <button type="submit" id="loginButton">Login</button>
+        </form>
 
-    <input type="password" id="password" placeholder="Password">
+        <p id="message" role="status" aria-live="polite"></p>
 
-    <button onclick="login()">Login</button>
+        <p class="register-link">
+            Don't have an account?
+            <a href="register.html">Register</a>
+        </p>
 
-    <p id="message"></p>
+        <p class="back-link">
+            <a href="index.html">Back to Home</a>
+        </p>
+    </div>
 
-    <p>
-        Don't have an account?
-        <a href="register.html">Register</a>
-    </p>
+    <script>
+        // Replace this with your actual deployed Render backend URL.
+        const API_BASE_URL = "YOUR_RENDER_BACKEND_URL";
 
-</div>
+        const loginForm = document.getElementById("loginForm");
+        const loginButton = document.getElementById("loginButton");
+        const message = document.getElementById("message");
 
-<script>
+        loginForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
 
-async function login() {
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+            if (!email || !password) {
+                message.textContent = "Please enter your email and password.";
+                return;
+            }
 
-    const response = await fetch(
-        "http://localhost:5000/api/auth/login",
-        {
-            method: "POST",
+            if (API_BASE_URL === "YOUR_RENDER_BACKEND_URL") {
+                message.textContent =
+                    "Backend URL is not configured yet. Please contact the developer.";
+                return;
+            }
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+            loginButton.disabled = true;
+            loginButton.textContent = "Logging in...";
+            message.textContent = "";
 
-            body: JSON.stringify({
-                email,
-                password
-            })
-        }
-    );
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/api/auth/login`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            password: password
+                        })
+                    }
+                );
 
-    const data = await response.json();
+                const data = await response.json();
 
-    document.getElementById("message").innerText =
-        data.message;
+                if (!response.ok) {
+                    message.textContent =
+                        data.message || "Login failed. Please check your details.";
+                    return;
+                }
 
-    if (response.ok) {
+                if (!data.user) {
+                    message.textContent =
+                        "Login response is missing user information.";
+                    return;
+                }
 
-        localStorage.setItem(
-            "foodhubUser",
-            JSON.stringify(data.user)
-        );
+                localStorage.setItem(
+                    "foodhubUser",
+                    JSON.stringify(data.user)
+                );
 
-        setTimeout(() => {
-            window.location.href = "menu.html";
-        }, 500);
-    }
-}
+                message.textContent = "Login successful! Opening menu...";
 
-</script>
+                setTimeout(function () {
+                    window.location.href = "menu.html";
+                }, 500);
 
+            } catch (error) {
+                console.error("FoodHub login error:", error);
+
+                message.textContent =
+                    "Cannot connect to the server. Check your backend URL and deployment.";
+            } finally {
+                loginButton.disabled = false;
+                loginButton.textContent = "Login";
+            }
+        });
+    </script>
 </body>
 </html>
+```
