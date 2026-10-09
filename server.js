@@ -1,4 +1,4 @@
-
+```javascript
 const express = require("express");
 const cors = require("cors");
 
@@ -51,14 +51,14 @@ app.use((req, res) => {
 // Error handler
 app.use((err, req, res, next) => {
     console.error("Server Error:", err);
-
     res.status(500).json({
-        message: "Internal server error"
+        message: "Internal server error",
+        error: err.message
     });
 });
 
 // Start server
 app.listen(PORT, () => {
-    console.log(`FoodHub server started on port ${PORT}`);
+    console.log(`FoodHub Server Started on port ${PORT}`);
 });
-
+```
