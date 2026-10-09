@@ -5,12 +5,23 @@ const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+// ==========================================
+// MIDDLEWARE
+// ==========================================
+
+app.use(cors({
+    origin: [
+        "https://abhinayamyala-2010.github.io"
+    ]
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Home
+// ==========================================
+// HOME AND HEALTH CHECK
+// ==========================================
+
 app.get("/", (req, res) => {
     res.json({
         message: "FoodHub API is running",
@@ -18,7 +29,6 @@ app.get("/", (req, res) => {
     });
 });
 
-// Health check
 app.get("/api", (req, res) => {
     res.json({
         message: "FoodHub API is running",
@@ -26,7 +36,10 @@ app.get("/api", (req, res) => {
     });
 });
 
-// API routes
+// ==========================================
+// API ROUTES
+// ==========================================
+
 app.use("/api/foods", require("./routes/foodRoutes"));
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
@@ -40,7 +53,10 @@ app.use("/api/customers", require("./routes/customerRoutes"));
 app.use("/api/staff", require("./routes/staffRoutes"));
 app.use("/api/tables", require("./routes/tableRoutes"));
 
-// 404 handler
+// ==========================================
+// 404 HANDLER
+// ==========================================
+
 app.use((req, res) => {
     res.status(404).json({
         message: "API endpoint not found",
@@ -48,16 +64,23 @@ app.use((req, res) => {
     });
 });
 
-// Error handler
+// ==========================================
+// ERROR HANDLER
+// ==========================================
+
 app.use((err, req, res, next) => {
     console.error("Server Error:", err);
+
     res.status(500).json({
         message: "Internal server error",
         error: err.message
     });
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`FoodHub Server Started on port ${PORT}`);
+// ==========================================
+// START SERVER
+// ==========================================
+
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`FoodHub API running on port ${PORT}`);
 });
