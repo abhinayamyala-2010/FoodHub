@@ -1,11 +1,12 @@
+```javascript
 const express = require("express");
 const cors = require("cors");
-const path = require("path");
 
+// Create Express app
 const app = express();
 
-const PORT = 5000;
-
+// Render assigns the port through process.env.PORT
+const PORT = process.env.PORT || 5000;
 
 // ==========================================
 // MIDDLEWARE
@@ -15,21 +16,33 @@ app.use(cors());
 
 app.use(express.json());
 
-app.use(express.urlencoded({
-    extended: true
-}));
-
-
-// ==========================================
-// FRONTEND
-// ==========================================
-
 app.use(
-    express.static(
-        path.join(__dirname, "../frontend")
-    )
+    express.urlencoded({
+        extended: true
+    })
 );
 
+// ==========================================
+// HOME
+// ==========================================
+
+app.get("/", (req, res) => {
+    res.json({
+        message: "FoodHub API is running",
+        status: "success"
+    });
+});
+
+// ==========================================
+// API HEALTH CHECK
+// ==========================================
+
+app.get("/api", (req, res) => {
+    res.json({
+        message: "FoodHub API is running",
+        status: "success"
+    });
+});
 
 // ==========================================
 // API ROUTES
@@ -75,7 +88,6 @@ app.use(
     require("./routes/reviewRoutes")
 );
 
-// ⭐ REPORTS
 app.use(
     "/api/reports",
     require("./routes/reportRoutes")
@@ -96,152 +108,52 @@ app.use(
     require("./routes/tableRoutes")
 );
 
-
 // ==========================================
-// HOME
-// ==========================================
-
-app.get("/", (req, res) => {
-
-    res.sendFile(
-        path.join(
-            __dirname,
-            "../frontend/index.html"
-        )
-    );
-
-});
-
-
-// ==========================================
-// API HEALTH CHECK
-// ==========================================
-
-app.get("/api", (req, res) => {
-
-    res.json({
-        message: "FoodHub API is running",
-        status: "success"
-    });
-
-});
-
-
-// ==========================================
-// 404
+// 404 HANDLER
 // ==========================================
 
 app.use((req, res) => {
-
     res.status(404).json({
-
         message: "API endpoint not found",
-
         path: req.originalUrl
-
     });
-
 });
-
 
 // ==========================================
 // ERROR HANDLER
 // ==========================================
 
 app.use((err, req, res, next) => {
-
-    console.error(
-        "Server Error:",
-        err
-    );
+    console.error("Server Error:", err);
 
     res.status(500).json({
-
         message: "Internal server error",
-
         error: err.message
-
     });
-
 });
-
 
 // ==========================================
 // START SERVER
 // ==========================================
 
 app.listen(PORT, () => {
-
-    console.log(
-        "================================="
-    );
-
-    console.log(
-        "FoodHub Server Started"
-    );
-
-    console.log(
-        `http://localhost:${PORT}`
-    );
-
-    console.log(
-        "================================="
-    );
-
-    console.log(
-        "Available APIs:"
-    );
-
-    console.log(
-        "Foods       : /api/foods"
-    );
-
-    console.log(
-        "Auth        : /api/auth"
-    );
-
-    console.log(
-        "Orders      : /api/orders"
-    );
-
-    console.log(
-        "Admin Orders: /api/admin/orders"
-    );
-
-    console.log(
-        "Reservations: /api/reservations"
-    );
-
-    console.log(
-        "Inventory   : /api/inventory"
-    );
-
-    console.log(
-        "Coupons     : /api/coupons"
-    );
-
-    console.log(
-        "Reviews     : /api/reviews"
-    );
-
-    console.log(
-        "Reports     : /api/reports"
-    );
-
-    console.log(
-        "Customers   : /api/customers"
-    );
-
-    console.log(
-        "Staff       : /api/staff"
-    );
-
-    console.log(
-        "Tables      : /api/tables"
-    );
-
-    console.log(
-        "================================="
-    );
-
+    console.log("=================================");
+    console.log("FoodHub Server Started");
+    console.log(`Port: ${PORT}`);
+    console.log("=================================");
+    console.log("Available APIs:");
+    console.log("/api/foods");
+    console.log("/api/auth");
+    console.log("/api/orders");
+    console.log("/api/admin/orders");
+    console.log("/api/reservations");
+    console.log("/api/inventory");
+    console.log("/api/coupons");
+    console.log("/api/reviews");
+    console.log("/api/reports");
+    console.log("/api/customers");
+    console.log("/api/staff");
+    console.log("/api/tables");
+    console.log("=================================");
 });
+```
