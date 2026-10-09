@@ -1,4 +1,4 @@
-```javascript
+
 const express = require("express");
 const cors = require("cors");
 
@@ -61,4 +61,3 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
     console.log(`FoodHub Server Started on port ${PORT}`);
 });
-```
